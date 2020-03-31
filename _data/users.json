@@ -1,0 +1,44 @@
+[
+	{
+		"name": "Samantha Miller",
+		"svvID": "samantha.miller",
+		"password": "123456",
+		"email": "samantha@gmail.com",
+		"designation": "Staff"
+	},
+	{
+		"name": "Brad Smith",
+		"svvID": "brad.smith",
+		"password": "123456",
+		"email": "brad@gmail.com",
+		"designation": "Staff"
+	},
+	{
+		"name": "Jane Doe",
+		"svvID": "jane.doe",
+		"password": "123456",
+		"email": "jane@gmail.com",
+		"designation": "Student"
+	},
+	{
+		"name": "John Doe",
+		"svvID": "john.doe",
+		"password": "123456",
+		"email": "john@gmail.com",
+		"designation": "Student"
+	},
+	{
+		"name": "Mary Smith",
+		"svvID": "mary.smith",
+		"password": "123456",
+		"email": "mary@gmail.com",
+		"designation": "Admin"
+	},
+	{
+		"name": "Kacy East",
+		"svvID": "kacy.east",
+		"password": "123456",
+		"email": "kacy@gmail.com",
+		"designation": "Admin"
+	}
+]

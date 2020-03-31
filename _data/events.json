@@ -1,0 +1,44 @@
+[
+	{
+		"eventID": "118d2139-fa16-4f95-8eac-65f387369999",
+		"eventName": "Event 1",
+		"eventDescription": "Description of Event 1",
+		"eventIncharge": "brad.smith",
+		"eventUnder": "Committee 1"
+	},
+	{
+		"eventID": "6ef89894-e1c7-4b58-b4ea-243874d06de6",
+		"eventName": "Event 2",
+		"eventDescription": "Description of Event 2",
+		"eventIncharge": "samantha.miller",
+		"eventUnder": "Committee 2"
+	},
+	{
+		"eventID": "49b521f7-588c-4dd7-b1fb-8dcad0d835a4",
+		"eventName": "Event 3",
+		"eventDescription": "Description of Event 3",
+		"eventIncharge": "brad.smith",
+		"eventUnder": "Committee 2"
+	},
+	{
+		"eventID": "0394ae60-0541-44df-9046-852edea6b31c",
+		"eventName": "Event 4",
+		"eventDescription": "Description of Event 4",
+		"eventIncharge": "samantha.miller",
+		"eventUnder": "Committee 3"
+	},
+	{
+		"eventID": "d7b75fee-300d-4338-a5c9-7cd7263a863c",
+		"eventName": "Event 5",
+		"eventDescription": "Description of Event 5",
+		"eventIncharge": "brad.smith",
+		"eventUnder": "Committee 3"
+	},
+	{
+		"eventID": "246d57cb-d364-4fdb-ad3e-f981e807b346",
+		"eventName": "Event 6",
+		"eventDescription": "Description of Event 6",
+		"eventIncharge": "samantha.miller",
+		"eventUnder": "Committee 4"
+	}
+]

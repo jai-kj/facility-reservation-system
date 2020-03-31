@@ -1,0 +1,42 @@
+[
+	{
+		"requestTime": "2020-03-30 18:03:00",
+		"requestID": "00dc85c9-dd33-44e2-9c14-954263d36b5e",
+		"requestStatus": "Alloted",
+		"requestSlotDate": "2020-04-03",
+		"requestSlotFrom": "09:00:00",
+		"requestSlotTill": "12:30:00",
+		"eventID": "d7b75fee-300d-4338-a5c9-7cd7263a863c",
+		"facilityID": "2fc74e02-6bb1-46fc-84ce-53deb320b815"
+	},
+	{
+		"requestTime": "2020-03-30 18:03:00",
+		"requestID": "17fece2d-d1c3-41de-95c0-550e81d2d2bd",
+		"requestStatus": "Waiting",
+		"requestSlotDate": "2020-04-02",
+		"requestSlotFrom": "08:30:00",
+		"requestSlotTill": "13:00:00",
+		"eventID": "246d57cb-d364-4fdb-ad3e-f981e807b346",
+		"facilityID": "8ce674e7-c739-4af5-968b-596521f73115"
+	},
+	{
+		"requestTime": "2020-03-30 18:03:00",
+		"requestID": "761f6eee-f43d-4892-b55f-091bb7732a1d",
+		"requestStatus": "Waiting",
+		"requestSlotDate": "2020-03-31",
+		"requestSlotFrom": "10:30:00",
+		"requestSlotTill": "12:00:00",
+		"eventID": "118d2139-fa16-4f95-8eac-65f387369999",
+		"facilityID": "3e2eb933-2c00-43e5-b907-d2ed76921d08"
+	},
+	{
+		"requestTime": "2020-03-30 18:03:00",
+		"requestID": "f106bc7a-0493-4776-a4c2-66ea3a720771",
+		"requestStatus": "Alloted",
+		"requestSlotDate": "2020-04-01",
+		"requestSlotFrom": "13:30:00",
+		"requestSlotTill": "15:30:00",
+		"eventID": "6ef89894-e1c7-4b58-b4ea-243874d06de6",
+		"facilityID": "5660dda8-afba-41e6-851e-7c8a3e2b9650"
+	}
+]

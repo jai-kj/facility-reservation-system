@@ -1,0 +1,42 @@
+[
+	{
+		"mapperID": "24457476-0a78-4851-9988-9a1cd61e10d6",
+		"day": "Thursday",
+		"facilityID": "8ce674e7-c739-4af5-968b-596521f73115"
+	},
+	{
+		"mapperID": "32a72877-4c0d-49bc-9f21-d83bcc6c9eec",
+		"day": "Thursday",
+		"facilityID": "5660dda8-afba-41e6-851e-7c8a3e2b9650"
+	},
+	{
+		"mapperID": "377077e7-d161-43d2-be70-c4081455e782",
+		"day": "Monday",
+		"facilityID": "3e2eb933-2c00-43e5-b907-d2ed76921d08"
+	},
+	{
+		"mapperID": "51b24223-e00c-4f46-aaad-856304d3677e",
+		"day": "Wednesday",
+		"facilityID": "5660dda8-afba-41e6-851e-7c8a3e2b9650"
+	},
+	{
+		"mapperID": "60293097-e6bf-41fa-9853-fddd62bdd8f2",
+		"day": "Friday",
+		"facilityID": "2fc74e02-6bb1-46fc-84ce-53deb320b815"
+	},
+	{
+		"mapperID": "6b99ca25-a00b-4205-8dba-98de8872d75d",
+		"day": "Friday",
+		"facilityID": "8ce674e7-c739-4af5-968b-596521f73115"
+	},
+	{
+		"mapperID": "936d3cb4-7782-4c25-9f7a-b3f6b39fff22",
+		"day": "Monday",
+		"facilityID": "2fc74e02-6bb1-46fc-84ce-53deb320b815"
+	},
+	{
+		"mapperID": "e54bb9cb-f34c-461c-a242-6c04b4e727ff",
+		"day": "Tuesday",
+		"facilityID": "3e2eb933-2c00-43e5-b907-d2ed76921d08"
+	}
+]

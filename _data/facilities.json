@@ -1,0 +1,34 @@
+[
+	{
+		"facilityID": "8ce674e7-c739-4af5-968b-596521f73115",
+		"facilityType": "Lab",
+		"facilityName": "501",
+		"facilityStartTime": "08:00:00",
+		"facilityEndTime": "17:00:00",
+		"facilityIncharge": "kacy.east"
+	},
+	{
+		"facilityID": "2fc74e02-6bb1-46fc-84ce-53deb320b815",
+		"facilityType": "Class",
+		"facilityName": "504",
+		"facilityStartTime": "09:00:00",
+		"facilityEndTime": "17:30:00",
+		"facilityIncharge": "kacy.east"
+	},
+	{
+		"facilityID": "3e2eb933-2c00-43e5-b907-d2ed76921d08",
+		"facilityType": "Lab",
+		"facilityName": "301",
+		"facilityStartTime": "08:00:00",
+		"facilityEndTime": "16:00:00",
+		"facilityIncharge": "mary.smith"
+	},
+	{
+		"facilityID": "5660dda8-afba-41e6-851e-7c8a3e2b9650",
+		"facilityType": "Class",
+		"facilityName": "305",
+		"facilityStartTime": "09:00:00",
+		"facilityEndTime": "18:00:00",
+		"facilityIncharge": "mary.smith"
+	}
+]

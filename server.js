@@ -32,8 +32,6 @@ const events = require("./routes/events");
 
 //* Mounting Route
 app.use("/fr/api/v1/events", events);
-// app.use("/fr/api/v1/auth", auth);
-// app.use("/user", require("./routes/Test"));
 
 app.use(errorHandler);
 

@@ -1,5 +1,5 @@
 const sequelize = require("sequelize");
-const { User, Time } = require("./");
+const User = require("./User");
 const db = require("../../config/db");
 const { v4 } = require("uuid");
 

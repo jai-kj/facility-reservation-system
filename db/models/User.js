@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
+const bcrypt = require("bcryptjs");
 const db = require("../../config/db");
-const { Event } = require("./");
 
 class User extends sequelize.Model {}
 User.init(
@@ -18,10 +18,7 @@ User.init(
 		},
 		name: {
 			type: sequelize.STRING,
-			allowNull: false,
-			validate: {
-				isAlpha: true
-			}
+			allowNull: false
 		},
 		email: {
 			type: sequelize.STRING,
@@ -32,6 +29,7 @@ User.init(
 		},
 		designation: {
 			type: sequelize.STRING,
+			allowNull: false,
 			validate: {
 				isAlpha: true,
 				isIn: [["Admin", "Staff", "Student"]]
@@ -42,7 +40,13 @@ User.init(
 		sequelize: db,
 		modelName: "user",
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeCreate: async user => {
+				const salt = await bcrypt.genSalt(10);
+				user.password = await bcrypt.hash(user.password, salt);
+			}
+		}
 	}
 );
 

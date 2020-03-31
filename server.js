@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+const errorHandler = require("./middleware/errors");
 
 //* Configuring ENV
 dotenv.config({ path: "./config/config.env" });
@@ -15,16 +17,27 @@ const PORT = process.env.PORT || 5000;
 //* Initializing server
 const app = express();
 
+//* Enabling parsing of request body
+app.use(express.json());
+app.use(cookieParser());
+
 //* Dev logging middleware
 if ((process.env.NODE_ENV = "development")) {
 	app.use(morgan("dev"));
 }
 
 //* Routes Files
+const auth = require("./routes/auth");
+const events = require("./routes/events");
 
 //* Mounting Route
+app.use("/fr/api/v1/events", events);
+// app.use("/fr/api/v1/auth", auth);
+// app.use("/user", require("./routes/Test"));
 
-//* Spinnig up server
+app.use(errorHandler);
+
+//* Spinning up server
 const server = app.listen(PORT, () =>
 	console.log(`Server started at port : ${PORT}`.yellow)
 );

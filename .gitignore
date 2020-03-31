@@ -1,2 +1,3 @@
 node_modules
 routes/Test.js
+config/config.env

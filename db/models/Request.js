@@ -1,6 +1,7 @@
 const sequelize = require("sequelize");
 const { v4 } = require("uuid");
-const { Facility, Event } = require("./");
+const Event = require("./Event");
+const Facility = require("./Facility");
 const db = require("../../config/db");
 const moment = require("moment");
 
@@ -67,7 +68,6 @@ Request.init(
 		timestamps: false
 	}
 );
-
 Request.belongsTo(Event, { foreignKey: "eventID" });
 
 Request.belongsTo(Facility, { foreignKey: "facilityID" });

@@ -1,6 +1,7 @@
 const sequelize = require("sequelize");
 const db = require("../../config/db");
-const { Mapper, Time } = require("./index");
+const Mapper = require("./Mapper");
+const Time = require("./Time");
 
 class DailySchedule extends sequelize.Model {}
 

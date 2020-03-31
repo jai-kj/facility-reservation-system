@@ -1,5 +1,5 @@
 const sequelize = require("sequelize");
-const { User } = require("./");
+const User = require("./User");
 const db = require("../../config/db");
 const { v4 } = require("uuid");
 
@@ -9,8 +9,7 @@ Event.init(
 	{
 		eventID: {
 			type: sequelize.STRING(36),
-			primaryKey: true,
-			defaultValue: v4()
+			primaryKey: true
 		},
 		eventName: {
 			type: sequelize.STRING(500),
@@ -19,13 +18,6 @@ Event.init(
 		eventDescription: {
 			type: sequelize.TEXT("medium"),
 			allowNull: true
-		},
-		eventIncharge: {
-			type: sequelize.STRING(50),
-			allowNull: false,
-			validate: {
-				is: /^[a-zA-Z]+\.?[a-zA-Z]*$/
-			}
 		},
 		eventUnder: {
 			type: sequelize.STRING(255),
@@ -39,11 +31,16 @@ Event.init(
 		sequelize: db,
 		modelName: "event",
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeCreate: async event => {
+				event.eventID = v4();
+			}
+		}
 	}
 );
 
-Event.belongsTo(User, { as: "Incharge", foreignKey: "eventIncharge" });
+Event.belongsTo(User, { as: "incharge", foreignKey: "eventIncharge" });
 
 User.hasMany(Event, { foreignKey: "eventIncharge" });
 

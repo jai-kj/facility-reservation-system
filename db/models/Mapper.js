@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
 const db = require("../../config/db");
-const { Facility } = require("./index");
+const Facility = require("./Facility");
 const { v4 } = require("uuid");
 
 class Mapper extends sequelize.Model {}

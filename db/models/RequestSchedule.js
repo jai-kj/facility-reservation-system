@@ -1,6 +1,8 @@
 const sequelize = require("sequelize");
 const db = require("../../config/db");
-const { Request, Time } = require("./index");
+const Request = require("./Request");
+const Time = require("./Time");
+
 class RequestSchedule extends sequelize.Model {}
 
 RequestSchedule.init(

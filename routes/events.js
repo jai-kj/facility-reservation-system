@@ -1,4 +1,6 @@
 const express = require("express");
+const router = express.Router();
+
 const {
 	getEvents,
 	getEvent,
@@ -6,11 +8,11 @@ const {
 	updateEvent
 } = require("../controllers/events");
 
-const router = express.Router();
-
+//* Importing advanceResults middleware
+const advanceResults = require("../middleware/advancedResults");
 router
 	.route("/")
-	.get(getEvents)
+	.get(advanceResults(), getEvents)
 	.post(addEvent);
 router
 	.route("/:eventID")

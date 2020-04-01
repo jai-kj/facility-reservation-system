@@ -29,9 +29,11 @@ if ((process.env.NODE_ENV = "development")) {
 //* Routes Files
 const auth = require("./routes/auth");
 const events = require("./routes/events");
+const facilities = require("./routes/facilities");
 
 //* Mounting Route
 app.use("/fr/api/v1/events", events);
+app.use("/fr/api/v1/facilities", facilities);
 
 app.use(errorHandler);
 

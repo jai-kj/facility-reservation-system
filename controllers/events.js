@@ -12,8 +12,8 @@ const {
 // @route   GET /fr/api/v1/events
 // @access  Private/Unauthorized
 exports.getEvents = asyncHandler(async (req, res, next) => {
-	const events = await getAll();
-	res.status(200).json({ success: true, data: events });
+	const events = await getAll(req.advQuery);
+	res.status(200).json({ success: true, count: events.length, data: events });
 });
 
 // @desc    Get single events
@@ -29,7 +29,7 @@ exports.getEvent = asyncHandler(async (req, res, next) => {
 	res.status(200).json({ success: true, data: event });
 });
 
-// @desc    Add Event
+// @desc    Add event
 // @route   POST /fr/api/v1/events
 // @access  Private/Authorized
 exports.addEvent = asyncHandler(async (req, res, next) => {

@@ -1,8 +1,10 @@
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 const { Event } = require("../db/models/index");
 const asyncHandler = require("../middleware/async");
 
-exports.getAll = asyncHandler(async () => {
-	const events = await Event.findAll();
+exports.getAll = asyncHandler(async advQuery => {
+	const events = await Event.findAll(advQuery);
 	return events;
 });
 exports.getOne = asyncHandler(async eventID => {

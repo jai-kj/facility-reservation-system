@@ -16,7 +16,7 @@ router
 	.post(addEvent);
 router
 	.route("/:eventID")
-	.get(getEvent)
+	.get(advanceResults(), getEvent)
 	.put(updateEvent);
 
 module.exports = router;

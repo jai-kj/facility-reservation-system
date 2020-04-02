@@ -20,7 +20,7 @@ exports.getEvents = asyncHandler(async (req, res, next) => {
 // @route   GET /fr/api/v1/events/:eventID
 // @access  Private/Unauthorized
 exports.getEvent = asyncHandler(async (req, res, next) => {
-	const event = await getOne(req.params.eventID);
+	const event = await getOne(req.params.eventID, req.advQuery);
 	if (!event) {
 		return next(
 			new ErrorResponse(`Event not found with ID : ${req.params.eventID}`, 404)

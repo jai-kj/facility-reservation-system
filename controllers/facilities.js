@@ -19,7 +19,7 @@ exports.getFacilities = asyncHandler(async (req, res, next) => {
 // @access  Private/Unauthorized
 
 exports.getFacility = asyncHandler(async (req, res, next) => {
-	const facility = await getOne(req.params.facilityID);
+	const facility = await getOne(req.params.facilityID, req.advQuery);
 	if (!facility) {
 		return next(
 			new ErrorResponse(

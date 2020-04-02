@@ -1,14 +1,46 @@
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
-const { Event } = require("../db/models/index");
 const asyncHandler = require("../middleware/async");
 
+const Event = require("../db/models/Event");
+const User = require("../db/models/User");
+const Request = require("../db/models/Request");
+
 exports.getAll = asyncHandler(async advQuery => {
+	advQuery.include = [];
+
+	if (advQuery.includeModels && advQuery.includeModels.includes("Request")) {
+		advQuery.include.push({
+			model: Request
+		});
+	}
+	if (advQuery.includeModels && advQuery.includeModels.includes("User")) {
+		advQuery.include.push({
+			model: User,
+			as: "incharge",
+			attributes: ["svvID", "name", "email", "designation"]
+		});
+	}
+
 	const events = await Event.findAll(advQuery);
 	return events;
 });
-exports.getOne = asyncHandler(async eventID => {
-	const event = await Event.findByPk(eventID);
+exports.getOne = asyncHandler(async (eventID, advQuery) => {
+	advQuery.include = [];
+
+	if (advQuery.includeModels && advQuery.includeModels.includes("Request")) {
+		advQuery.include.push({
+			model: Request
+		});
+	}
+	if (advQuery.includeModels && advQuery.includeModels.includes("User")) {
+		advQuery.include.push({
+			model: User,
+			as: "incharge",
+			attributes: ["svvID", "name", "email", "designation"]
+		});
+	}
+	const event = await Event.findByPk(eventID, advQuery);
 	return event;
 });
 exports.addOne = asyncHandler(async eventData => {

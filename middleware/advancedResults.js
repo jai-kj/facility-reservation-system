@@ -1,3 +1,5 @@
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 const advancedResults = () => async (req, res, next) => {
 	let advQuery = {};
 
@@ -12,16 +14,10 @@ const advancedResults = () => async (req, res, next) => {
 
 	//* To filter results with operators like (<,>,<=,>=,==, != ,etc)
 	if (reqQuery.filter) {
-		let queryStr = reqQuery.filter;
+		const json = JSON.parse(reqQuery.filter);
+		const filterOBJ = mapOperators(json);
 
-		// Create operators ($gt], $gte, etc)
-		queryStr = queryStr.replace(
-			/\b(gt|gte|lt|lte|in|eq|ne|not|between)\b/g,
-			match => `$${match}`
-		);
-		const filterObj = JSON.parse(queryStr);
-
-		advQuery.where = filterObj;
+		advQuery.where = filterOBJ;
 	}
 
 	//* To sort result using col name
@@ -40,10 +36,55 @@ const advancedResults = () => async (req, res, next) => {
 		advQuery.limit = parseInt(reqQuery.limit);
 	}
 
+	if (reqQuery.include) {
+		advQuery.includeModels = reqQuery.include.split(",");
+	}
+
 	req.advQuery = advQuery;
 
 	next();
 };
+
+//? Function to map keys like [gt,gte,in,...] received from request query to sequelize native operators like [Op.gt,Op.gte,....] : Doing this will maintain security and no deprecation warning will be thrown by sequelize.
+
+const mapOperators = json => {
+	let tempObj = {};
+	let jsonKeys = Object.keys(json);
+	let nestedObj = Object.values(json);
+	for (let j = 0; j < nestedObj.length; j++) {
+		const oldKey = Object.keys(nestedObj[j]);
+		const oldValue = Object.values(nestedObj[j]);
+		if (oldKey[0] === "gte") {
+			tempObj[jsonKeys[j]] = { [Op.gte]: oldValue[0] };
+		}
+		if (oldKey[0] === "lte") {
+			tempObj[jsonKeys[j]] = { [Op.lte]: oldValue[0] };
+		}
+		if (oldKey[0] === "lt") {
+			tempObj[jsonKeys[j]] = { [Op.lt]: oldValue[0] };
+		}
+		if (oldKey[0] === "gt") {
+			tempObj[jsonKeys[j]] = { [Op.gt]: oldValue[0] };
+		}
+		if (oldKey[0] === "eq") {
+			tempObj[jsonKeys[j]] = { [Op.eq]: oldValue[0] };
+		}
+		if (oldKey[0] === "ne") {
+			tempObj[jsonKeys[j]] = { [Op.ne]: oldValue[0] };
+		}
+		if (oldKey[0] === "not") {
+			tempObj[jsonKeys[j]] = { [Op.not]: oldValue[0] };
+		}
+		if (oldKey[0] === "between") {
+			tempObj[jsonKeys[j]] = { [Op.between]: oldValue[0] };
+		}
+		if (oldKey[0] === "in") {
+			tempObj[jsonKeys[j]] = { [Op.in]: oldValue[0] };
+		}
+	}
+	return tempObj;
+};
+
 module.exports = advancedResults;
 
 //? Example Advanced Query Requests

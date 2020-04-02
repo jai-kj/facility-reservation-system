@@ -11,7 +11,7 @@ const advancedResults = require("../middleware/advancedResults");
 router.route("/").get(advancedResults(), getFacilities);
 router
 	.route("/:facilityID")
-	.get(getFacility)
+	.get(advancedResults(), getFacility)
 	.put(updateFacility);
 
 module.exports = router;

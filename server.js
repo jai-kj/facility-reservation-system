@@ -30,10 +30,14 @@ if ((process.env.NODE_ENV = "development")) {
 const auth = require("./routes/auth");
 const events = require("./routes/events");
 const facilities = require("./routes/facilities");
+const users = require("./routes/users");
 
 //* Mounting Route
 app.use("/fr/api/v1/events", events);
 app.use("/fr/api/v1/facilities", facilities);
+app.use("/fr/api/v1/auth", auth);
+app.use("/fr/api/v1/users", users);
+// app.use("/fr/api/v1/user", require("./routes/Test"));
 
 app.use(errorHandler);
 

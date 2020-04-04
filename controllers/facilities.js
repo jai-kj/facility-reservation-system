@@ -1,13 +1,28 @@
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
 
-const { getAll, getOne, updateOne } = require("../services/facilityService");
+const {
+	getAll,
+	getOne,
+	updateOne,
+	addOne,
+} = require("../services/facilityService");
 
 // @desc    Get all facilities
 // @route   GET /fr/api/v1/facilities
+// @route   GET /fr/api/v1/users/:svvID/facilities
+
 // @access  Private/Unauthorized
 
 exports.getFacilities = asyncHandler(async (req, res, next) => {
+	if (req.params.svvID) {
+		if (req.advQuery.where) {
+			req.advQuery.where.facilityIncharge = req.params.svvID;
+		} else {
+			req.advQuery.where = {};
+			req.advQuery.where.facilityIncharge = req.params.svvID;
+		}
+	}
 	const facilities = await getAll(req.advQuery);
 	res
 		.status(200)
@@ -29,6 +44,15 @@ exports.getFacility = asyncHandler(async (req, res, next) => {
 		);
 	}
 	res.status(200).json({ success: true, data: facility });
+});
+
+// @desc    Add Facility
+// @route   POST /fr/api/v1/facilities
+// @access  Private/Authorized
+
+exports.addFacility = asyncHandler(async (req, res, next) => {
+	const facility = await addOne(req.body);
+	res.status(201).json({ success: true, data: facility });
 });
 
 // @desc    Update facility

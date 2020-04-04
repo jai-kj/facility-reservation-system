@@ -9,8 +9,7 @@ Facility.init(
 	{
 		facilityID: {
 			type: sequelize.STRING(36),
-			primaryKey: true,
-			defaultValue: v4()
+			primaryKey: true
 		},
 		facilityType: {
 			type: sequelize.STRING,
@@ -47,7 +46,12 @@ Facility.init(
 		sequelize: db,
 		modelName: "facility",
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeCreate: async facility => {
+				facility.facilityID = v4();
+			}
+		}
 	}
 );
 

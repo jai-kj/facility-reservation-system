@@ -53,6 +53,12 @@ exports.getOne = asyncHandler(async (facilityID, advQuery) => {
 	const facilities = await Facility.findByPk(facilityID, advQuery);
 	return facilities;
 });
+
+exports.addOne = asyncHandler(async body => {
+	// const facilityName,facilityType,
+	return null;
+});
+
 exports.updateOne = asyncHandler(async (facilityID, updateData) => {
 	const facility = await Facility.findByPk(facilityID);
 	if (!facility) {

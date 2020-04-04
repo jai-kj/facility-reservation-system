@@ -5,13 +5,23 @@ const {
 	getAll,
 	getOne,
 	addOne,
-	updateOne
+	updateOne,
 } = require("../services/eventService");
 
 // @desc    Get all events
 // @route   GET /fr/api/v1/events
+// @route   GET /fr/api/v1/users/:svvID/events
 // @access  Private/Unauthorized
 exports.getEvents = asyncHandler(async (req, res, next) => {
+	if (req.params.svvID) {
+		if (req.advQuery.where) {
+			req.advQuery.where.eventIncharge = req.params.svvID;
+		} else {
+			req.advQuery.where = {};
+			req.advQuery.where.eventIncharge = req.params.svvID;
+		}
+	}
+
 	const events = await getAll(req.advQuery);
 	res.status(200).json({ success: true, count: events.length, data: events });
 });

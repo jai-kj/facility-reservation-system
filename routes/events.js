@@ -1,22 +1,26 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const {
 	getEvents,
 	getEvent,
 	addEvent,
-	updateEvent
+	updateEvent,
 } = require("../controllers/events");
 
 //* Importing advanceResults middleware
 const advanceResults = require("../middleware/advancedResults");
+
+//* Importing middleware to protect routes
+const { protect, authorize } = require("../middleware/auth");
+
 router
 	.route("/")
-	.get(advanceResults(), getEvents)
-	.post(addEvent);
+	.get(protect, advanceResults(), getEvents)
+	.post(protect, authorize("Staff", "Admin"), addEvent);
 router
 	.route("/:eventID")
-	.get(advanceResults(), getEvent)
-	.put(updateEvent);
+	.get(protect, advanceResults(), getEvent)
+	.put(protect, authorize("Staff", "Admin"), updateEvent);
 
 module.exports = router;

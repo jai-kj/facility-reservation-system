@@ -47,7 +47,7 @@ const advancedResults = () => async (req, res, next) => {
 
 //? Function to map keys like [gt,gte,in,...] received from request query to sequelize native operators like [Op.gt,Op.gte,....] : Doing this will maintain security and no deprecation warning will be thrown by sequelize.
 
-const mapOperators = json => {
+const mapOperators = (json) => {
 	let tempObj = {};
 	let jsonKeys = Object.keys(json);
 	let nestedObj = Object.values(json);
@@ -56,30 +56,24 @@ const mapOperators = json => {
 		const oldValue = Object.values(nestedObj[j]);
 		if (oldKey[0] === "gte") {
 			tempObj[jsonKeys[j]] = { [Op.gte]: oldValue[0] };
-		}
-		if (oldKey[0] === "lte") {
+		} else if (oldKey[0] === "lte") {
 			tempObj[jsonKeys[j]] = { [Op.lte]: oldValue[0] };
-		}
-		if (oldKey[0] === "lt") {
+		} else if (oldKey[0] === "lt") {
 			tempObj[jsonKeys[j]] = { [Op.lt]: oldValue[0] };
-		}
-		if (oldKey[0] === "gt") {
+		} else if (oldKey[0] === "gt") {
 			tempObj[jsonKeys[j]] = { [Op.gt]: oldValue[0] };
-		}
-		if (oldKey[0] === "eq") {
+		} else if (oldKey[0] === "eq") {
 			tempObj[jsonKeys[j]] = { [Op.eq]: oldValue[0] };
-		}
-		if (oldKey[0] === "ne") {
+		} else if (oldKey[0] === "ne") {
 			tempObj[jsonKeys[j]] = { [Op.ne]: oldValue[0] };
-		}
-		if (oldKey[0] === "not") {
+		} else if (oldKey[0] === "not") {
 			tempObj[jsonKeys[j]] = { [Op.not]: oldValue[0] };
-		}
-		if (oldKey[0] === "between") {
+		} else if (oldKey[0] === "between") {
 			tempObj[jsonKeys[j]] = { [Op.between]: oldValue[0] };
-		}
-		if (oldKey[0] === "in") {
+		} else if (oldKey[0] === "in") {
 			tempObj[jsonKeys[j]] = { [Op.in]: oldValue[0] };
+		} else {
+			tempObj[jsonKeys[j]] = nestedObj[j];
 		}
 	}
 	return tempObj;

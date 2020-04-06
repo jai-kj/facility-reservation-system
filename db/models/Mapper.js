@@ -10,20 +10,18 @@ Mapper.init(
 		mapperID: {
 			type: sequelize.STRING(36),
 			primaryKey: true,
-			defaultValue: v4()
 		},
 		facilityID: {
 			type: sequelize.STRING(36),
 			allowNull: false,
 			validate: {
-				isUUID: 4
-			}
+				isUUID: 4,
+			},
 		},
 		day: {
 			type: sequelize.STRING,
 			allowNull: false,
 			validate: {
-				isAlpha: true,
 				isIn: [
 					[
 						"Sunday",
@@ -32,17 +30,25 @@ Mapper.init(
 						"Wednesday",
 						"Thursday",
 						"Friday",
-						"Saturday"
-					]
-				]
-			}
-		}
+						"Saturday",
+					],
+				],
+			},
+		},
 	},
 	{
 		sequelize: db,
 		modelName: "mapper",
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeCreate: (mapper) => {
+				mapper.mapperID = v4();
+			},
+			beforeBulkCreate: (mappers) => {
+				mappers.forEach((mapper) => (mapper.mapperID = v4()));
+			},
+		},
 	}
 );
 

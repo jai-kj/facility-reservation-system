@@ -13,6 +13,12 @@ const advancedResults = require("../middleware/advancedResults");
 //* Importing middleware to protect routes
 const { protect, authorize } = require("../middleware/auth");
 
+//* Include other resource routes
+const dailyScheduleRouter = require("./dailySchedules");
+
+//* Re-routing into other resources
+router.use("/:facilityID/dailyschedules", dailyScheduleRouter);
+
 router
 	.route("/")
 	.get(protect, advancedResults(), getFacilities)

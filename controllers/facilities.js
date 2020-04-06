@@ -51,7 +51,11 @@ exports.getFacility = asyncHandler(async (req, res, next) => {
 // @access  Private/Authorized
 
 exports.addFacility = asyncHandler(async (req, res, next) => {
+	req.body.facilityIncharge = req.user.svvID;
 	const facility = await addOne(req.body);
+	if (facility.err) {
+		return next(err);
+	}
 	res.status(201).json({ success: true, data: facility });
 });
 
@@ -68,14 +72,16 @@ exports.updateFacility = asyncHandler(async (req, res, next) => {
 		delete req.body.facilityIncharge;
 	}
 
-	const facility = await updateOne(req.params.facilityID, req.body);
-	if (!facility) {
-		return next(
-			new ErrorResponse(
-				`Facility not found with ID : ${req.params.facilityID}`,
-				404
-			)
-		);
+	const facility = await updateOne(
+		req.user.svvID,
+		req.params.facilityID,
+		req.body
+	);
+	if (facility.message) {
+		return next(new ErrorResponse(facility.message, facility.statusCode));
+	}
+	if (facility.err) {
+		return next(facility.err);
 	}
 	res.status(200).json({ success: true, data: facility });
 });

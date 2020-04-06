@@ -9,38 +9,39 @@ Facility.init(
 	{
 		facilityID: {
 			type: sequelize.STRING(36),
-			primaryKey: true
+			primaryKey: true,
 		},
 		facilityType: {
 			type: sequelize.STRING,
 			allowNull: false,
 			validate: {
 				isAlpha: true,
-				isIn: [["Lab", "Class", "Hall", "Sport"]]
-			}
+				isIn: [["Lab", "Class", "Hall", "Sport"]],
+			},
 		},
 		facilityName: {
 			type: sequelize.STRING,
 			allowNull: false,
+			unique: true,
 			validate: {
-				isAlphanumeric: true
-			}
+				isAlphanumeric: true,
+			},
 		},
 		facilityIncharge: {
 			type: sequelize.STRING(50),
 			allowNull: false,
 			validate: {
-				is: /^[a-zA-Z]+\.?[a-zA-Z]*$/
-			}
+				is: /^[a-zA-Z]+\.?[a-zA-Z]*$/,
+			},
 		},
 		facilityStartTime: {
 			type: sequelize.TIME,
-			allowNull: false
+			allowNull: false,
 		},
 		facilityEndTime: {
 			type: sequelize.TIME,
-			allowNull: false
-		}
+			allowNull: false,
+		},
 	},
 	{
 		sequelize: db,
@@ -48,10 +49,10 @@ Facility.init(
 		freezeTableName: true,
 		timestamps: false,
 		hooks: {
-			beforeCreate: async facility => {
+			beforeCreate: async (facility) => {
 				facility.facilityID = v4();
-			}
-		}
+			},
+		},
 	}
 );
 

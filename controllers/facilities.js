@@ -11,7 +11,6 @@ const {
 // @desc    Get all facilities
 // @route   GET /fr/api/v1/facilities
 // @route   GET /fr/api/v1/users/:svvID/facilities
-
 // @access  Private/Unauthorized
 
 exports.getFacilities = asyncHandler(async (req, res, next) => {

@@ -46,7 +46,9 @@ Mapper.init(
 				mapper.mapperID = v4();
 			},
 			beforeBulkCreate: (mappers) => {
-				mappers.forEach((mapper) => (mapper.mapperID = v4()));
+				mappers.forEach((mapper) => {
+					if (!mapper.mapperID) mapper.mapperID = v4();
+				});
 			},
 		},
 	}

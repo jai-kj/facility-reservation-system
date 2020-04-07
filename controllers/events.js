@@ -6,6 +6,7 @@ const {
 	getOne,
 	addOne,
 	updateOne,
+	deleteOne,
 } = require("../services/eventService");
 
 // @desc    Get all events
@@ -31,10 +32,11 @@ exports.getEvents = asyncHandler(async (req, res, next) => {
 // @access  Private/Unauthorized
 exports.getEvent = asyncHandler(async (req, res, next) => {
 	const event = await getOne(req.params.eventID, req.advQuery);
-	if (!event) {
-		return next(
-			new ErrorResponse(`Event not found with ID : ${req.params.eventID}`, 404)
-		);
+	if (event.message) {
+		return next(new ErrorResponse(event.message, event.statusCode));
+	}
+	if (event.err) {
+		return next(event.err);
 	}
 	res.status(200).json({ success: true, data: event });
 });
@@ -43,9 +45,12 @@ exports.getEvent = asyncHandler(async (req, res, next) => {
 // @route   POST /fr/api/v1/events
 // @access  Private/Authorized
 exports.addEvent = asyncHandler(async (req, res, next) => {
-	const event = await addOne(req.body);
-	if (!event) {
-		return next(new ErrorResponse(`Event cannot be added : Bad request`, 400));
+	const event = await addOne(req.user.svvID, req.body);
+	if (event.message) {
+		return next(new ErrorResponse(event.message, event.statusCode));
+	}
+	if (event.err) {
+		return next(event.err);
 	}
 	res.status(201).json({ success: true, data: event });
 });
@@ -62,11 +67,26 @@ exports.updateEvent = asyncHandler(async (req, res, next) => {
 		delete req.body.eventIncharge;
 	}
 
-	const event = await updateOne(req.params.eventID, req.body);
-	if (!event) {
-		return next(
-			new ErrorResponse(`Event not found with ID : ${req.params.eventID}`, 404)
-		);
+	const event = await updateOne(req.user.svvID, req.params.eventID, req.body);
+	if (event.message) {
+		return next(new ErrorResponse(event.message, event.statusCode));
+	}
+	if (event.err) {
+		return next(event.err);
 	}
 	res.status(200).json({ success: true, data: event });
+});
+
+// @desc    Delete event
+// @route   DELETE /fr/api/v1/events/:eventID
+// @access  Private/Authorized
+exports.deleteEvent = asyncHandler(async (req, res, next) => {
+	const event = await deleteOne(req.user.svvID, req.params.eventID);
+	if (event.message) {
+		return next(new ErrorResponse(event.message, event.statusCode));
+	}
+	if (event.err) {
+		return next(event.err);
+	}
+	res.status(200).json({ success: true });
 });

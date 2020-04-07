@@ -52,6 +52,11 @@ Facility.init(
 			beforeCreate: async (facility) => {
 				facility.facilityID = v4();
 			},
+			beforeBulkCreate: (facilities) => {
+				facilities.forEach((facility) => {
+					if (!facility.facilityID) facility.facilityID = v4();
+				});
+			},
 		},
 	}
 );

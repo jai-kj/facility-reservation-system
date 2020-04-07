@@ -12,60 +12,66 @@ Request.init(
 		requestID: {
 			type: sequelize.STRING(36),
 			primaryKey: true,
-			defaultValue: v4()
 		},
 		requestTime: {
 			type: sequelize.DATE,
 			allowNUll: true,
 			get() {
 				const time = this.getDataValue("requestTime");
-				return moment
-					.utc(time)
-					.local()
-					.format("YYYY-MM-DD HH:MM:SS");
-			}
+				return moment.utc(time).local().format("YYYY-MM-DD HH:MM:SS");
+			},
 		},
 		eventID: {
 			type: sequelize.STRING(36),
 			allowNull: false,
 			validate: {
-				isUUID: 4
-			}
+				isUUID: 4,
+			},
 		},
 		facilityID: {
 			type: sequelize.STRING(36),
 			allowNull: false,
 			validate: {
-				isUUID: 4
-			}
+				isUUID: 4,
+			},
 		},
 		requestStatus: {
 			type: sequelize.STRING,
 			allowNull: false,
 			defaultValue: "Waiting",
 			validate: {
-				isIn: [["Waiting", "Alloted", "Canceled"]]
-			}
+				isIn: [["Waiting", "Alloted", "Canceled"]],
+			},
 		},
 		requestSlotDate: {
 			type: sequelize.DATEONLY,
 			allowNull: false,
-			defaultValue: new Date(Date.now())
+			defaultValue: new Date(Date.now()),
 		},
 		requestSlotFrom: {
 			type: sequelize.TIME,
-			allowNull: false
+			allowNull: false,
 		},
 		requestSlotTill: {
 			type: sequelize.TIME,
-			allowNull: false
-		}
+			allowNull: false,
+		},
 	},
 	{
 		sequelize: db,
 		modelName: "request",
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeCreate: (request) => {
+				request.requestID = v4();
+			},
+			beforeBulkCreate: (requests) => {
+				requests.forEach((request) => {
+					if (!request.requestID) request.requestID = v4();
+				});
+			},
+		},
 	}
 );
 Request.belongsTo(Event, { foreignKey: "eventID" });

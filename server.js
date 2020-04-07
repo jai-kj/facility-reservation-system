@@ -31,12 +31,14 @@ const auth = require("./routes/auth");
 const events = require("./routes/events");
 const facilities = require("./routes/facilities");
 const users = require("./routes/users");
+const requests = require("./routes/requests");
 
 //* Mounting Route
 app.use("/fr/api/v1/events", events);
 app.use("/fr/api/v1/facilities", facilities);
 app.use("/fr/api/v1/auth", auth);
 app.use("/fr/api/v1/users", users);
+// app.use("/fr/api/v1/requests", requests);
 // app.use("/fr/api/v1/test", require("./routes/Test"));
 
 app.use(errorHandler);

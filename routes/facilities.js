@@ -15,9 +15,11 @@ const { protect, authorize } = require("../middleware/auth");
 
 //* Include other resource routes
 const dailyScheduleRouter = require("./dailySchedules");
+const requestRouter = require("./requests");
 
 //* Re-routing into other resources
 router.use("/:facilityID/dailyschedules", dailyScheduleRouter);
+router.use("/:facilityID/requests", requestRouter);
 
 router
 	.route("/")

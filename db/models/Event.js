@@ -9,23 +9,23 @@ Event.init(
 	{
 		eventID: {
 			type: sequelize.STRING(36),
-			primaryKey: true
+			primaryKey: true,
 		},
 		eventName: {
 			type: sequelize.STRING(500),
-			allowNull: false
+			allowNull: false,
 		},
 		eventDescription: {
 			type: sequelize.TEXT("medium"),
-			allowNull: true
+			allowNull: true,
 		},
 		eventUnder: {
 			type: sequelize.STRING(255),
 			allowNull: true,
 			validate: {
-				isAlpha: true
-			}
-		}
+				isAlpha: true,
+			},
+		},
 	},
 	{
 		sequelize: db,
@@ -33,10 +33,15 @@ Event.init(
 		freezeTableName: true,
 		timestamps: false,
 		hooks: {
-			beforeCreate: async event => {
+			beforeCreate: (event) => {
 				event.eventID = v4();
-			}
-		}
+			},
+			beforeBulkCreate: (events) => {
+				events.forEach((event) => {
+					if (!event.eventID) event.eventID = v4();
+				});
+			},
+		},
 	}
 );
 

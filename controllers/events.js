@@ -24,6 +24,9 @@ exports.getEvents = asyncHandler(async (req, res, next) => {
 	}
 
 	const events = await getAll(req.advQuery);
+	if (events.err) {
+		return next(err);
+	}
 	res.status(200).json({ success: true, count: events.length, data: events });
 });
 

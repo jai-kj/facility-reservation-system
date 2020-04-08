@@ -5,15 +5,22 @@ const {
 	getOne,
 	addOne,
 	updateOne,
+	deleteOne,
 } = require("../services/requestService");
 
-// @desc    Get all requests of a event / facility
-// @route   GET /fr/api/v1/events/eventID/requests
-// @route   GET /fr/api/v1/facility/facilityID/requests
+// @desc    Get all requests of a event / facility / user
+// @route   GET /fr/api/v1/events/:eventID/requests
+// @route   GET /fr/api/v1/facility/:facilityID/requests
+// @route   GET /fr/api/v1/users/:svvID/requests
 // @access  Private/Authorized
 
 exports.getRequests = asyncHandler(async (req, res, next) => {
-	const requests = await getAll(req.user.svvID, req.params, req.advQuery);
+	const requests = await getAll(
+		req.user.svvID,
+		req.user.designation,
+		req.params,
+		req.advQuery
+	);
 	if (requests.message) {
 		return next(new ErrorResponse(requests.message, requests.statusCode));
 	}
@@ -77,4 +84,24 @@ exports.updateRequest = asyncHandler(async (req, res, next) => {
 	}
 
 	res.status(200).json({ success: true, data: request });
+});
+
+// @desc    Delete request of a event
+// @route   PUT /fr/api/v1/events/:eventID/requests/:requestID
+// @access  Private/Authorized
+
+exports.deleteRequest = asyncHandler(async (req, res, next) => {
+	const request = await deleteOne(
+		req.user.svvID,
+		req.params.eventID,
+		req.params.requestID
+	);
+	if (request.message) {
+		return next(new ErrorResponse(request.message, request.statusCode));
+	}
+	if (request.err) {
+		return next(request.err);
+	}
+
+	res.status(200).json({ success: true });
 });

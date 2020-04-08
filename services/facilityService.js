@@ -1,14 +1,14 @@
-const asyncHandler = require("../middleware/async");
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
+
 const Facility = require("../db/models/Facility");
 const Mapper = require("../db/models/Mapper");
 const Time = require("../db/models/Time");
 const Request = require("../db/models/Request");
 const DailySchedule = require("../db/models/DailySchedule");
 
-const sequelize = require("sequelize");
-const Op = sequelize.Op;
-
-exports.getAll = asyncHandler(async (advQuery) => {
+exports.getAll = async (advQuery) => {
+	let result = {};
 	advQuery.include = [];
 
 	if (advQuery.includeModels && advQuery.includeModels.includes("Time")) {
@@ -28,10 +28,16 @@ exports.getAll = asyncHandler(async (advQuery) => {
 			model: Request,
 		});
 	}
-	const facilities = await Facility.findAll(advQuery);
+	const facilities = await Facility.findAll(advQuery).catch((err) => {
+		result.err = err;
+	});
+	if (result.err) return result;
+
 	return facilities;
-});
-exports.getOne = asyncHandler(async (facilityID, advQuery) => {
+};
+
+exports.getOne = async (facilityID, advQuery) => {
+	let result = {};
 	advQuery.include = [];
 	if (advQuery.includeModels && advQuery.includeModels.includes("Time")) {
 		advQuery.include.push({
@@ -51,11 +57,22 @@ exports.getOne = asyncHandler(async (facilityID, advQuery) => {
 		});
 	}
 
-	const facilities = await Facility.findByPk(facilityID, advQuery);
-	return facilities;
-});
+	const facility = await Facility.findByPk(facilityID, advQuery).catch(
+		(err) => {
+			result.er = err;
+		}
+	);
+	if (result.err) return result;
+	if (!facility) {
+		result.message = `Facility not found with ID :${facilityID}`;
+		result.statusCode = 404;
+		return result;
+	}
+	result = facility;
+	return result;
+};
 
-exports.addOne = asyncHandler(async (body) => {
+exports.addOne = async (body) => {
 	let result = {};
 	const {
 		facilityName,
@@ -78,9 +95,9 @@ exports.addOne = asyncHandler(async (body) => {
 
 	result = facility;
 	return result;
-});
+};
 
-exports.updateOne = asyncHandler(async (svvID, facilityID, updateData) => {
+exports.updateOne = async (svvID, facilityID, updateData) => {
 	let result = {};
 
 	const facility = await Facility.findByPk(facilityID);
@@ -97,4 +114,4 @@ exports.updateOne = asyncHandler(async (svvID, facilityID, updateData) => {
 
 	updatedFacility = await facility.update(updateData);
 	return updatedFacility;
-});
+};

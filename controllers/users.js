@@ -8,6 +8,9 @@ const { getAll, getOne } = require("../services/userService");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
 	const users = await getAll(req.advQuery);
+	if (users.err) {
+		return next(users.err);
+	}
 	res.status(200).json({ success: true, count: users.length, data: users });
 });
 
@@ -17,10 +20,11 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 exports.getUser = asyncHandler(async (req, res, next) => {
 	const user = await getOne(req.params.svvID, req.advQuery);
-	if (!user) {
-		return next(
-			new ErrorResponse(`User not found with SVV ID : ${req.params.svvID}`, 404)
-		);
+	if (user.message) {
+		return next(new ErrorResponse(user.message, user.statusCode));
+	}
+	if (user.err) {
+		return next(user.err);
 	}
 	res.status(200).json({ success: true, data: user });
 });

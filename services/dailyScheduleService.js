@@ -1,11 +1,10 @@
-const asyncHandler = require("../middleware/async");
 const Time = require("../db/models/Time");
 const Facility = require("../db/models/Facility");
 const DailySchedule = require("../db/models/DailySchedule");
 const Mapper = require("../db/models/Mapper");
 const { getOne: getOneFacility } = require("./facilityService");
 
-exports.getAll = asyncHandler(async (advQuery) => {
+exports.getAll = async (advQuery) => {
 	let result = {};
 	const mappers = await Mapper.findAll({
 		where: advQuery.where,
@@ -15,13 +14,14 @@ exports.getAll = asyncHandler(async (advQuery) => {
 		},
 	}).catch((err) => {
 		result.err = err;
-		return result;
 	});
+	if (result.err) return result;
+
 	result = mappers;
 	return result;
-});
+};
 
-exports.addOne = asyncHandler(async (svvID, facilityID, body) => {
+exports.addOne = async (svvID, facilityID, body) => {
 	let result = {};
 	const facility = await Facility.findByPk(facilityID);
 	if (!facility) {
@@ -36,7 +36,6 @@ exports.addOne = asyncHandler(async (svvID, facilityID, body) => {
 	}
 
 	const days = Object.keys(body.schedules);
-	console.log("exports.addOne -> days", days);
 	const mapperArr = days.map((day) => {
 		let obj = {};
 		(obj.day = day),
@@ -44,24 +43,24 @@ exports.addOne = asyncHandler(async (svvID, facilityID, body) => {
 			(obj.time = body.schedules[day]);
 		return obj;
 	});
-	// console.log(mapperArr);
 
 	for (let index = 0; index < mapperArr.length; index++) {
 		let mapper = await Mapper.create(mapperArr[index]).catch((err) => {
 			result.err = err;
-			return result;
 		});
+		if (result.err) return result;
+
 		await mapper.addTimes(mapperArr[index].time).catch((err) => {
 			result.err = err;
-			return result;
 		});
+		if (result.err) return result;
 	}
 
 	result = await getOneFacility(facilityID, { includeModels: "Time" });
 	return result;
-});
+};
 
-exports.updateOne = asyncHandler(async (svvID, facilityID, body) => {
+exports.updateOne = async (svvID, facilityID, body) => {
 	let result = {};
 	const facility = await Facility.findByPk(facilityID);
 	if (!facility) {
@@ -88,9 +87,9 @@ exports.updateOne = asyncHandler(async (svvID, facilityID, body) => {
 	const existingMappers = await Mapper.findAll({ where: { facilityID } }).catch(
 		(err) => {
 			result.err = err;
-			return result;
 		}
 	);
+	if (result.err) return result;
 
 	for (let index = 0; index < mapperArr.length; index++) {
 		if (
@@ -101,26 +100,26 @@ exports.updateOne = asyncHandler(async (svvID, facilityID, body) => {
 			)[0];
 			await oldMapper.setTimes(mapperArr[index].time).catch((err) => {
 				result.err = err;
-				return result;
 			});
+			if (result.err) return result;
 		} else {
 			let newMapper = await Mapper.create(mapperArr[index]).catch((err) => {
 				result.err = err;
-				return result;
 			});
+			if (result.err) return result;
 
 			await newMapper.addTimes(mapperArr[index].time).catch((err) => {
 				result.err = err;
-				return result;
 			});
+			if (result.err) return result;
 		}
 	}
 
 	result = await getOneFacility(facilityID, { includeModels: "Time" });
 	return result;
-});
+};
 
-exports.deleteOne = asyncHandler(async (svvID, facilityID, advQuery) => {
+exports.deleteOne = async (svvID, facilityID, advQuery) => {
 	let result = {};
 	const facility = await Facility.findByPk(facilityID);
 	if (!facility) {
@@ -136,9 +135,9 @@ exports.deleteOne = asyncHandler(async (svvID, facilityID, advQuery) => {
 
 	const mappers = await Mapper.destroy(advQuery).catch((err) => {
 		result.err = err;
-		return result;
 	});
+	if (result.err) return result;
 
 	result = await getOneFacility(facilityID, { includeModels: "Time" });
 	return result;
-});
+};

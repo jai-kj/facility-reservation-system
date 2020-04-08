@@ -1,10 +1,9 @@
-const asyncHandler = require("../middleware/async");
 const User = require("../db/models/User");
 
 //* Function to register new user in the system
 // @params {*} body : body object containing user details
 
-exports.register = asyncHandler(async (body) => {
+exports.register = async (body) => {
 	const { svvID, name, email, password, designation } = body;
 	let result = {};
 	const user = await User.create({
@@ -16,17 +15,17 @@ exports.register = asyncHandler(async (body) => {
 	}).catch((err) => {
 		//* If error occurs appending it to result object
 		result.err = err;
-		return results;
 	});
+	if (result.err) return result;
 	result = user;
 	return result;
-});
+};
 
 //* Function to log user into the system
 // @params "*" svvID : SVV ID of the user
 // @params "*" password: Password of the user
 
-exports.login = asyncHandler(async (svvID, password) => {
+exports.login = async (svvID, password) => {
 	let result = {};
 	const user = await User.scope("withPwd").findByPk(svvID);
 	if (!user) {
@@ -49,29 +48,30 @@ exports.login = asyncHandler(async (svvID, password) => {
 	result = generateToken(user, 200);
 
 	return result;
-});
+};
 
 //* Function to get logged in user
 // @params "*" svvID : SVV ID of the user
-exports.getMe = asyncHandler(async (svvID) => {
+exports.getMe = async (svvID) => {
 	const user = await User.findByPk(svvID);
 	return user;
-});
+};
 
 //* Function to update user details in the system
 // @params "*" svvID : SVV ID of the user
 // @params {*} updateData : Object containing fields to be updated
 
-exports.updateUserDetails = asyncHandler(async (svvID, updateData) => {
+exports.updateUserDetails = async (svvID, updateData) => {
 	let result = {};
 	const user = await User.findByPk(svvID);
 	const updatedUser = await user.update(updateData).catch((err) => {
 		result.err = err;
-		return result;
 	});
+	if (result.err) return result;
+
 	result = updatedUser;
 	return result;
-});
+};
 
 /**
  ** A function to form the result containing the JWT used for log in by user and cookie options to

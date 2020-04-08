@@ -5,6 +5,7 @@ const {
 	getRequest,
 	addRequest,
 	updateRequest,
+	deleteRequest,
 } = require("../controllers/requests");
 
 //* Importing advanceResults middleware
@@ -21,6 +22,7 @@ router
 router
 	.route("/:requestID")
 	.get(protect, authorize("Staff", "Admin"), advancedResults(), getRequest)
-	.put(protect, authorize("Admin"), updateRequest);
+	.put(protect, authorize("Admin"), updateRequest)
+	.delete(protect, authorize("Staff", "Admin"), deleteRequest);
 
 module.exports = router;

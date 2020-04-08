@@ -1,12 +1,12 @@
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
-const asyncHandler = require("../middleware/async");
 
 const Event = require("../db/models/Event");
 const User = require("../db/models/User");
 const Request = require("../db/models/Request");
 
-exports.getAll = asyncHandler(async (advQuery) => {
+exports.getAll = async (advQuery) => {
+	let result = {};
 	advQuery.include = [];
 
 	if (advQuery.includeModels && advQuery.includeModels.includes("Request")) {
@@ -22,10 +22,14 @@ exports.getAll = asyncHandler(async (advQuery) => {
 		});
 	}
 
-	const events = await Event.findAll(advQuery);
+	const events = await Event.findAll(advQuery).catch((err) => {
+		result.err = err;
+	});
+	if (result.err) return result;
+
 	return events;
-});
-exports.getOne = asyncHandler(async (eventID, advQuery) => {
+};
+exports.getOne = async (eventID, advQuery) => {
 	let result = {};
 	advQuery.include = [];
 
@@ -53,8 +57,8 @@ exports.getOne = asyncHandler(async (eventID, advQuery) => {
 	}
 	result = event;
 	return result;
-});
-exports.addOne = asyncHandler(async (svvID, eventData) => {
+};
+exports.addOne = async (svvID, eventData) => {
 	let result = {};
 	eventData["eventIncharge"] = svvID;
 	const event = await Event.create(eventData).catch((err) => {
@@ -64,8 +68,8 @@ exports.addOne = asyncHandler(async (svvID, eventData) => {
 
 	result = event;
 	return result;
-});
-exports.updateOne = asyncHandler(async (svvID, eventID, updateData) => {
+};
+exports.updateOne = async (svvID, eventID, updateData) => {
 	let result = {};
 	const event = await Event.findByPk(eventID);
 	if (!event) {
@@ -81,9 +85,9 @@ exports.updateOne = asyncHandler(async (svvID, eventID, updateData) => {
 	updatedEvent = await event.update(updateData);
 	result = updatedEvent;
 	return result;
-});
+};
 
-exports.deleteOne = asyncHandler(async (svvID, eventID) => {
+exports.deleteOne = async (svvID, eventID) => {
 	let result = {};
 	const event = await Event.findByPk(eventID);
 	if (!event) {
@@ -102,4 +106,4 @@ exports.deleteOne = asyncHandler(async (svvID, eventID) => {
 	});
 	if (result.err) return result;
 	return result;
-});
+};

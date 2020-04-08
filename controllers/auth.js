@@ -55,7 +55,7 @@ exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
 // @route     GET /fr/api/v1/auth/logout
 // @access    Private/Unauthorized
 exports.logout = asyncHandler(async (req, res, next) => {
-	//* Send token = null in response and make reset cookie by making token = ""
+	//* Send token = null in response and reset cookie by making token = ""
 	res
 		.status(200)
 		.cookie("token", "", {

@@ -1,11 +1,10 @@
-const asyncHandler = require("../middleware/async");
 const Event = require("../db/models/Event");
 const Request = require("../db/models/Request");
 const Facility = require("../db/models/Facility");
 const RequestSchedule = require("../db/models/RequestSchedule");
 const Time = require("../db/models/Time");
 
-exports.getAll = asyncHandler(async (svvID, params, advQuery) => {
+exports.getAll = async (svvID, designation, params, advQuery) => {
 	let result = {};
 	if (params.facilityID) {
 		const facility = await Facility.findByPk(params.facilityID);
@@ -62,6 +61,22 @@ exports.getAll = asyncHandler(async (svvID, params, advQuery) => {
 			model: Facility,
 		});
 	}
+	//* This segment is added to provide a single user with all the requests for all the facilities under him/her. (Only support for Admin users)
+	if (params.svvID && designation === "Admin") {
+		advQuery["model"] = Request;
+
+		const facilities = await Facility.findAll({
+			where: {
+				facilityIncharge: params.svvID,
+			},
+			include: advQuery,
+		}).catch((err) => {
+			result.err = err;
+		});
+		if (result.err) return result;
+		result = facilities;
+		return result;
+	}
 
 	const requests = await Request.findAll(advQuery).catch((err) => {
 		result.err = err;
@@ -70,9 +85,9 @@ exports.getAll = asyncHandler(async (svvID, params, advQuery) => {
 
 	result = requests;
 	return result;
-});
+};
 
-exports.getOne = asyncHandler(async (svvID, params, advQuery) => {
+exports.getOne = async (svvID, params, advQuery) => {
 	let result = {};
 	if (params.facilityID) {
 		const facility = await Facility.findByPk(params.facilityID);
@@ -144,9 +159,9 @@ exports.getOne = asyncHandler(async (svvID, params, advQuery) => {
 	}
 	result = request;
 	return result;
-});
+};
 
-exports.addOne = asyncHandler(async (svvID, params, body) => {
+exports.addOne = async (svvID, params, body) => {
 	let result = {};
 	const event = await Event.findByPk(params.eventID);
 	if (!event) {
@@ -186,9 +201,9 @@ exports.addOne = asyncHandler(async (svvID, params, body) => {
 
 	result = request;
 	return result;
-});
+};
 
-exports.updateOne = asyncHandler(async (svvID, params, requestStatus) => {
+exports.updateOne = async (svvID, params, requestStatus) => {
 	let result = {};
 	const facility = await Facility.findByPk(params.facilityID);
 	if (!facility) {
@@ -215,4 +230,31 @@ exports.updateOne = asyncHandler(async (svvID, params, requestStatus) => {
 
 	result = updatedRequest;
 	return result;
-});
+};
+
+exports.deleteOne = async (svvID, eventID, requestID) => {
+	let result = {};
+	const event = await Event.findByPk(eventID);
+	if (!event) {
+		result.message = `Event not found with ID : ${eventID}`;
+		result.statusCode = 404;
+		return result;
+	}
+	if (event.eventIncharge !== svvID) {
+		result.message = `User ${svvID} is not authorized to access this route.`;
+		result.statusCode = 401;
+		return result;
+	}
+	const request = await Request.findByPk(requestID);
+	if (!request) {
+		result.message = `Request not found with ID : ${requestID}`;
+		result.statusCode = 404;
+		return result;
+	}
+	await request.destroy().catch((err) => {
+		result.err = err;
+	});
+	if (result.err) return result;
+
+	return result;
+};

@@ -13,10 +13,12 @@ const advancedResults = require("../middleware/advancedResults");
 //* Include other resource routes
 const eventRouter = require("./events");
 const facilitiesRouter = require("./facilities");
+const requestRouter = require("./requests");
 
 //* Re-routing into other resources
 router.use("/:svvID/events", eventRouter);
 router.use("/:svvID/facilities", facilitiesRouter);
+router.use("/:svvID/requests", requestRouter);
 
 router.route("/").get(protect, advancedResults(), getUsers);
 router.route("/:svvID").get(protect, advancedResults(), getUser);

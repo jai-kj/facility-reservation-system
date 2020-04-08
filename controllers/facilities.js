@@ -23,6 +23,9 @@ exports.getFacilities = asyncHandler(async (req, res, next) => {
 		}
 	}
 	const facilities = await getAll(req.advQuery);
+	if (facilities.err) {
+		return next(facilities.err);
+	}
 	res
 		.status(200)
 		.json({ success: true, count: facilities.length, data: facilities });
@@ -34,13 +37,8 @@ exports.getFacilities = asyncHandler(async (req, res, next) => {
 
 exports.getFacility = asyncHandler(async (req, res, next) => {
 	const facility = await getOne(req.params.facilityID, req.advQuery);
-	if (!facility) {
-		return next(
-			new ErrorResponse(
-				`Facility not found with ID : ${req.params.facilityID}`,
-				404
-			)
-		);
+	if (facility.message) {
+		return next(new ErrorResponse(facility.message, facility.statusCode));
 	}
 	res.status(200).json({ success: true, data: facility });
 });
@@ -53,7 +51,7 @@ exports.addFacility = asyncHandler(async (req, res, next) => {
 	req.body.facilityIncharge = req.user.svvID;
 	const facility = await addOne(req.body);
 	if (facility.err) {
-		return next(err);
+		return next(facility.err);
 	}
 	res.status(201).json({ success: true, data: facility });
 });

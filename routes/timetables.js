@@ -7,9 +7,8 @@ const {
 } = require("../controllers/timetables");
 
 //* Importing middleware to protect routes
-const { protect, authorize } = require("../middleware/auth");
+const { protect } = require("../middleware/auth");
 
-router.use(authorize("Student", "Staff", "Admin"));
 router.route("/:date").get(protect, getTimeTable);
 router.route("/weekly/:date").get(protect, getWeeklyTimeTable);
 

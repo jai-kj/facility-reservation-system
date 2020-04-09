@@ -3,6 +3,9 @@ const dotenv = require("dotenv");
 const colors = require("colors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const hpp = require("hpp");
 const errorHandler = require("./middleware/errors");
 
 //* Configuring ENV
@@ -26,6 +29,15 @@ if ((process.env.NODE_ENV = "development")) {
 	app.use(morgan("dev"));
 }
 
+//* Additional security headers
+app.use(helmet());
+
+//* preventing Cross site scripting
+app.use(xss());
+
+//* Enabling Hpp
+app.use(hpp());
+
 //* Routes Files
 const auth = require("./routes/auth");
 const events = require("./routes/events");
@@ -38,8 +50,6 @@ app.use("/fr/api/v1/events", events);
 app.use("/fr/api/v1/facilities", facilities);
 app.use("/fr/api/v1/auth", auth);
 app.use("/fr/api/v1/users", users);
-// app.use("/fr/api/v1/requests", requests);
-// app.use("/fr/api/v1/test", require("./routes/Test"));
 
 app.use(errorHandler);
 

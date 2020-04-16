@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+
+body {
+  font-family: 'Ubuntu', sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+* {
+  box-sizing: border-box;
+}

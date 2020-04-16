@@ -31,7 +31,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 		return next(new ErrorResponse(`Please provide SVV ID and Password`, 400));
 	}
 	const result = await login(svvID, password);
-	if (result.err) {
+	if (result.message) {
 		return next(new ErrorResponse(result.message, result.statusCode));
 	}
 

@@ -29,7 +29,7 @@ exports.login = async (svvID, password) => {
 	let result = {};
 	const user = await User.scope("withPwd").findByPk(svvID);
 	if (!user) {
-		result.message = `Invalid Credentials`;
+		result.message = `Username not found`;
 		result.statusCode = 401;
 		return result;
 	}
@@ -37,7 +37,7 @@ exports.login = async (svvID, password) => {
 	//* Check if the password matches
 	const isMatch = await user.comparePassword(password);
 	if (!isMatch) {
-		result.message = `Invalid Credentials`;
+		result.message = `Incorrect Password`;
 		result.statusCode = 401;
 		return result;
 	}

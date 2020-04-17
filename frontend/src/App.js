@@ -1,14 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Sidebar from './components/layout/Sidebar'
-import Alerts from './components/layout/Alerts'
-import Notification from './components/Notification'
+import PrivateRoute from './components/routing/PrivateRoute'
 import Login from './components/auth/Login'
-
-import ViewEvent from './pages/ViewEvent'
-import AddNew from './pages/AddNew'
-import Facility from './pages/Facility'
+import Alerts from './components/layout/Alerts'
+import Home from './components/pages/Home'
 
 import AuthState from './context/auth/AuthState'
 import AlertState from './context/alert/AlertState'
@@ -19,28 +15,15 @@ const App = () => {
   return (
     <AuthState>
       <AlertState>
-        <Router>
-          <Fragment>
-            <Alerts />
+        <Fragment>
+          <Alerts />
+          <Router>
             <Switch>
               <Route exact path="/login" component={Login} />
+              <PrivateRoute path="/" component={Home} />
             </Switch>
-            <Sidebar username="JJ"/>
-            <div style=
-              {{
-                left: '200px', 
-                position: 'absolute', 
-                width: '100%',
-              }}>
-              <Switch>
-                <Route exact path="/" component={ViewEvent} />
-                <Route exact path="/addNew" component={AddNew} />
-                <Route exact path="/facility" component={Facility} />
-              </Switch>
-            </div>
-            <Notification />
-          </Fragment>
-        </Router>
+          </Router>
+        </Fragment>
       </AlertState>
     </AuthState>
   );

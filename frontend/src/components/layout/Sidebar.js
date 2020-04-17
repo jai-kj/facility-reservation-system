@@ -1,67 +1,79 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { NavLink } from 'react-router-dom'
 
-const Sidebar = ({username}) => {
+import AuthContext from '../../context/auth/authContext'
+import '../../css/Sidebar.css'
+const Sidebar = ({ username }) => {
 
-  const sidebar = {
-    backgroundColor: '#f7f7f7',
-    width: '200px',
-    height: '100%',
-    position: 'fixed',
-    flexDirection: 'column',
-  }
+  const authContext = useContext(AuthContext)
 
-  const justifyCenter = {
-    display: 'flex',
-    alignItems: 'center',
-  }
+  // const {isAuthenticated, logout, user, loadUser } = authContext
   
-  const sidebarTile = {
-    justifyContent: 'center',
-    textAlign: 'center',
-    borderRadius: '12%',
-    marginTop: '2rem',
-    width: '6rem',
-    height: '6rem',
-    fontSize: '30px',
-    color: '#494949',
-    border: 'transparent'
-  }
+  useEffect(() => {
+    authContext.loadUser();
+    //eslint-disable-next-line
+  }, [])
+  
+  const onLogout = () => {
+    authContext.logout()
+  } 
 
   return (
-    <div style={Object.assign(sidebar, justifyCenter)}>
+    <div className='sidebar'>
 
-      <Card style={Object.assign(sidebarTile, justifyCenter)}>
-        <h2>{username}</h2>
-      </Card>
+      <div>
+        <NavLink exact to="/" 
+          className="sidebar-tiles"
+          activeClassName="sidebar-tiles--active">
+          <div>
+            <h2>{username}</h2>
+          </div>
+        </NavLink>
+      </div>
 
-      <Card style={Object.assign(sidebarTile, justifyCenter)}>
-        <Link to="/">
-          <i className="far fa-calendar-alt"></i>
-          <h6 className="sidebar-links">Event</h6>
-        </Link>
-      </Card>
+      <div>
+        <NavLink to="/viewEvent"
+        className="sidebar-tiles"
+        activeClassName="sidebar-tiles--active">
+          <div>
+            <i className="far fa-calendar-alt"></i>
+            <h6 className="sidebar-links">Event</h6>
+          </div>
+        </NavLink>
+      </div>
 
-      <Card style={Object.assign(sidebarTile, justifyCenter)}>
-        <Link to="/addNew">
-          <i className="far fa-calendar-plus"></i>
-          <h6 className="sidebar-links">New</h6>
-        </Link>
-      </Card>
+      <div>
+        <NavLink to="/addNew"
+        className="sidebar-tiles"
+        activeClassName="sidebar-tiles--active">
+          <div>
+            <i className="far fa-calendar-plus"></i>
+            <h6 className="sidebar-links">New</h6>
+          </div>
+        </NavLink>
+      </div>
 
-      <Card style={Object.assign(sidebarTile, justifyCenter)}>
-        <Link to="/facility">
-          <i className="fas fa-user-cog"></i>
-          <h6 className="sidebar-links">Facilties</h6>
-        </Link>
-      </Card>
+      <div>
+        <NavLink to="/facility"
+        className="sidebar-tiles"
+        activeClassName="sidebar-tiles--active">
+          <div>
+            <i className="fas fa-user-cog"></i>
+            <h6 className="sidebar-links">Facilties</h6>
+          </div>
+        </NavLink>
+      </div>
 
-      <Card style={Object.assign(sidebarTile, justifyCenter)}>
-        <i className="fas fa-sign-out-alt"></i>
-        <h6 className="sidebar-links">Logout</h6>
-      </Card>
+      <div>
+        <a onClick={onLogout} href="#!"
+        className="sidebar-tiles">
+          <div>
+            <i className="fas fa-sign-out-alt"></i>
+            <h6 className="sidebar-links">Logout</h6>
+          </div>
+        </a>
+      </div>
 
     </div>
   )

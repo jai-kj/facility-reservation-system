@@ -1,13 +1,30 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import AlertContext from '../../context/alert/alertContext'
+import AuthContext from '../../context/auth/authContext'
 
 import { Col } from 'react-bootstrap'
 import '../../css/login.css'
-const Login = () => {
+
+const Login = props => {
+  
   const alertContext = useContext(AlertContext)
+  const authContext = useContext(AuthContext)
 
   const { setAlert } = alertContext
+  const { login, error, clearErrors, isAuthenticated } = authContext
+
+  useEffect(() => {
+    if(isAuthenticated){
+      props.history.push("/")
+    }
+
+    if(error != null) {
+      setAlert(error, 'danger')
+      clearErrors()
+    }
+    //eslint-disable-next-line
+  }, [error, isAuthenticated, props.history])
 
   const [user, setUser] = useState({
     svvID: '',
@@ -24,7 +41,10 @@ const Login = () => {
       setAlert('Please enter all fields', 'danger')
     }
     else{
-      console.log('Login Button Pressed');
+      login({
+        svvID,
+        password
+      })
     }
   }
 

@@ -1,14 +1,10 @@
-body{
-  background-color: #F2F6FA;
-}
-
 * {
   box-sizing: border-box;
 }
 
 .form-container {
-  background-color: #fff;
-  box-shadow: 0 5px 8px 0px rgba(92, 92, 92, 0.2);
+  background-color: #f7f7f7;
+  box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 50%;
   left: 50%;

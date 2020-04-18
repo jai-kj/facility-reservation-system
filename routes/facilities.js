@@ -5,6 +5,7 @@ const {
 	getFacility,
 	updateFacility,
 	addFacility,
+	getFacilityTypes,
 } = require("../controllers/facilities");
 
 //* Importing advanceResults middleware
@@ -25,6 +26,7 @@ router.use("/:facilityID/requests", requestRouter);
 router.use("/:facilityID/timeslots", timeSlotRouter);
 router.use("/:facilityID/timetables", timetableRouter);
 
+router.route("/types").get(protect, getFacilityTypes);
 router
 	.route("/")
 	.get(protect, advancedResults(), getFacilities)

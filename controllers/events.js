@@ -7,6 +7,7 @@ const {
 	addOne,
 	updateOne,
 	deleteOne,
+	getCommittees,
 } = require("../services/eventService");
 
 // @desc    Get all events
@@ -92,4 +93,16 @@ exports.deleteEvent = asyncHandler(async (req, res, next) => {
 		return next(event.err);
 	}
 	res.status(200).json({ success: true });
+});
+
+// @desc    Get all committees
+// @route   Get /fr/api/v1/events/committees
+// @access  Private/Unauthorized
+
+exports.getAllCommittees = asyncHandler(async (req, res, next) => {
+	const committees = await getCommittees();
+	if (committees.err) {
+		return next(committees.err);
+	}
+	res.status(200).json({ success: true, data: committees });
 });

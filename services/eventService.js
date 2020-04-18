@@ -107,3 +107,18 @@ exports.deleteOne = async (svvID, eventID) => {
 	if (result.err) return result;
 	return result;
 };
+
+exports.getCommittees = async () => {
+	let result = {};
+
+	const committees = await Event.aggregate("eventUnder", "DISTINCT", {
+		plain: false,
+	}).catch((err) => {
+		result.err = err;
+	});
+	if (result.err) return result;
+
+	let committeeArr = committees.map((committee) => Object.values(committee)[0]);
+	result.committees = committeeArr;
+	return result;
+};

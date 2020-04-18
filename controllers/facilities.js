@@ -6,6 +6,7 @@ const {
 	getOne,
 	updateOne,
 	addOne,
+	getTypes,
 } = require("../services/facilityService");
 
 // @desc    Get all facilities
@@ -81,4 +82,16 @@ exports.updateFacility = asyncHandler(async (req, res, next) => {
 		return next(facility.err);
 	}
 	res.status(200).json({ success: true, data: facility });
+});
+
+// @desc    Get facility types
+// @route   Get /fr/api/v1/facilities/types
+// @access  Private/Unauthorized
+
+exports.getFacilityTypes = asyncHandler(async (req, res, next) => {
+	const types = await getTypes();
+	if (types.err) {
+		return next(types.err);
+	}
+	res.status(200).json({ success: true, data: types });
 });

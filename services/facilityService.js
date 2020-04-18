@@ -115,3 +115,18 @@ exports.updateOne = async (svvID, facilityID, updateData) => {
 	updatedFacility = await facility.update(updateData);
 	return updatedFacility;
 };
+
+exports.getTypes = async () => {
+	let result = {};
+
+	const types = await Facility.aggregate("facilityType", "DISTINCT", {
+		plain: false,
+	}).catch((err) => {
+		result.err = err;
+	});
+	if (result.err) return result;
+
+	let typeArr = types.map((type) => Object.values(type)[0]);
+	result.types = typeArr;
+	return result;
+};

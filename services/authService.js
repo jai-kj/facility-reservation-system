@@ -29,20 +29,16 @@ exports.login = async (svvID, password) => {
 	let result = {};
 	const user = await User.scope("withPwd").findByPk(svvID);
 	if (!user) {
-		result.err = {
-			message: `Invalid Credentials`,
-			statusCode: 401,
-		};
+		result.message = `Invalid Credentials`;
+		result.statusCode = 401;
 		return result;
 	}
 
 	//* Check if the password matches
 	const isMatch = await user.comparePassword(password);
 	if (!isMatch) {
-		result.err = {
-			message: `Invalid Credentials`,
-			statusCode: 401,
-		};
+		result.message = `Invalid Credentials`;
+		result.statusCode = 401;
 		return result;
 	}
 	result = generateToken(user, 200);

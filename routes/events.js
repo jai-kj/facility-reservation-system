@@ -7,6 +7,7 @@ const {
 	addEvent,
 	updateEvent,
 	deleteEvent,
+	getAllCommittees,
 } = require("../controllers/events");
 
 //* Importing advanceResults middleware
@@ -20,6 +21,8 @@ const requestRouter = require("./requests");
 
 //* Re-routing into other resources
 router.use("/:eventID/requests", requestRouter);
+
+router.route("/committees").get(protect, getAllCommittees);
 
 router
 	.route("/")

@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import PrivateRoute from './components/routing/PrivateRoute'
 import Login from './components/auth/Login'
-import Alerts from './components/layout/Alerts'
+import Loading from './components/auth/Loading'
 import Home from './components/pages/Home'
 
 import AuthState from './context/auth/AuthState'
@@ -15,15 +15,13 @@ const App = () => {
   return (
     <AuthState>
       <AlertState>
-        <Fragment>
-          <Alerts />
           <Router>
             <Switch>
-              <Route exact path="/login" component={Login} />
+              <Route exact path="/loading" component={Loading} />
+              <Route path="/login" component={Login} />
               <PrivateRoute path="/" component={Home} />
             </Switch>
           </Router>
-        </Fragment>
       </AlertState>
     </AuthState>
   );

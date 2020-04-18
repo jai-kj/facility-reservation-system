@@ -1,55 +1,52 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useCallback } from 'react'
 import setAuthToken from '../../utils/setAuthToken'
 import axios from 'axios'
 
 import AuthContext from './authContext'
 import authReducer from './authReducer'
 import {
-  // REGISTER_SUCCESS,
-  // REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
 } from '../types'
 
-const AuthState = props => {
-  const initialState = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: null,
-    user: null,
-    loading: true,
-    error: null
-  }
+const initialState = {
+  token: localStorage.getItem('token'),
+  isAuthenticated: null,
+  user: null,
+  loading: true,
+  error: null
+}
 
+const AuthState = props => {
+  
   const [state, dispatch] = useReducer( authReducer, initialState)
 
-  //Register User
-  
-  //Load User @checks for which user is logged in to get user details
-  const loadUser = async () => {
+  //Load User Data on refresh
+  const loginFromToken = useCallback(async () => {
     // globally use token for accessing private routes
-    if(localStorage.token){
-      setAuthToken(localStorage.token)
-    }
+    if(!localStorage.token)
+      return false;
+
     try {
-      const res = await axios.get('/auth/me');
-      
+      const token = localStorage.token
+      setAuthToken(token)     
+      const {data:{data:user}} = await axios.get('/auth/me');
       dispatch({
-        type: USER_LOADED,
-        payload: res.data
+        type: LOGIN_SUCCESS,
+        payload: {data:{token, user}}
       })
+      return true;
+
     } catch (err) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: err.response.data.error
-      })
+      localStorage.removeItem('token')
+      return false;
     }
-  }
+  }, [])
+
   //Login User
-  const login = async formData => {
+  const login = useCallback( async formData => {
     const config = {
       header: {
         'Content-type': 'application/json'
@@ -57,33 +54,32 @@ const AuthState = props => {
     }
     
     try {
-      const res = await axios.post('/auth/login', formData, config);
+      //API call to get verified user's token
+      const {data: {data:{token}}} = await axios.post('/auth/login', formData, config);
 
+      //Sending user's token to get user info from API
+      setAuthToken(token)     
+      const {data:{data:user}} = await axios.get('/auth/me');
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data
+        payload: {data:{token, user}}
       })
-
-      loadUser()
     } catch (err) {
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.error
       })
     }
-  }
+  }, [])
+
   //Logout
-  const logout = async() => {
-    
-    // window.location.reload()
+  const logout = useCallback( async () => {
     await axios.get('/auth/logout');
     dispatch({ type: LOGOUT })
-    // dispatch({ type: LOGOUT })
-  }
+  }, [])
 
   //Clear Errors
-  const clearErrors = () => dispatch({ type: CLEAR_ERRORS })
-
+  const clearErrors = useCallback( () => dispatch({ type: CLEAR_ERRORS }), [])
 
   return(
     <AuthContext.Provider
@@ -95,8 +91,8 @@ const AuthState = props => {
         error: state.error,
         login,
         clearErrors,
-        loadUser,
-        logout
+        logout,
+        loginFromToken
       }}
     >
       {props.children}

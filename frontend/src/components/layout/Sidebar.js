@@ -1,39 +1,35 @@
-import React, { useContext, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext, useMemo, useCallback } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import AuthContext from '../../context/auth/authContext'
 import '../../css/Sidebar.css'
-const Sidebar = ({ username }) => {
+const Sidebar = () => {
 
   const authContext = useContext(AuthContext)
-
-  // const {isAuthenticated, logout, user, loadUser } = authContext
+  const { user, logout} = authContext
   
-  useEffect(() => {
-    authContext.loadUser();
-    //eslint-disable-next-line
-  }, [])
-  
-  const onLogout = () => {
-    authContext.logout()
-  } 
+  const initials = useMemo(() => (
+    user.name.toUpperCase().match(/\b(\w)/g).join('')
+  ), [user.name])
+  const onLogout = useCallback(() => {
+    logout()
+  }, [logout])
 
   return (
     <div className='sidebar'>
 
-      <div>
-        <NavLink exact to="/" 
-          className="sidebar-tiles"
-          activeClassName="sidebar-tiles--active">
-          <div>
-            <h2>{username}</h2>
-          </div>
-        </NavLink>
+      <div className="sidebar-tiles profile">
+        <h2>{initials}</h2>
       </div>
+        {/* <NavLink exact to="/" 
+          className="sidebar-tiles"
+          activeClassName="sidebar-tiles--active"> */}
+          {/* <div> */}
+        {/* </NavLink>
+      </div> */}
 
       <div>
-        <NavLink to="/viewEvent"
+        <NavLink exact to="/"
         className="sidebar-tiles"
         activeClassName="sidebar-tiles--active">
           <div>
@@ -79,11 +75,4 @@ const Sidebar = ({ username }) => {
   )
 }
 
-Sidebar.propTypes = {
-  username: PropTypes.string.isRequired
-}
-
-Sidebar.defaultProps = {
-  username: 'Dev'
-}
 export default Sidebar;

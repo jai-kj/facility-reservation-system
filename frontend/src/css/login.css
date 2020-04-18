@@ -2,6 +2,14 @@
   box-sizing: border-box;
 }
 
+.alerts{
+  position: absolute;
+  top: 13%;
+  left: 50%;
+  width: 400px;
+  transform: translate(-50%, 13%);
+}
+
 .form-container {
   background-color: #f7f7f7;
   box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.2);

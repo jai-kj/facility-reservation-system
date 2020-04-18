@@ -4,7 +4,7 @@ const AddNew = () => {
   
   return (
     <div>
-      <h1 className="p-3">Add New Page</h1>
+      <h1>Add New Page</h1>
     </div>
   )
 }

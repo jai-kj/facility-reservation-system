@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import Sidebar from '../layout/Sidebar'
@@ -11,17 +11,23 @@ import AddNew from './AddNew'
 import Facility from './Facility'
 
 
-
 const Home = () => {
+  const authContext = useContext(AuthContext)
+  const { user } = authContext
+
+  const notify = useMemo(() => {
+    if(user.designation !== 'Student')
+      return <Notification />
+    }, [user])
+    
   return (
     <Router>
       <Sidebar />
       <div style=
         {{
-          left: '200px', 
-          position: 'absolute', 
-          width: '100%',
-          backgroundColor: '#ffffff'
+          marginLeft: '200px',
+          backgroundColor: '#ffffff',
+          padding: '1.5rem'
         }}>
         {/* <Route exact path="/" component={Profile} user={user}/> */}
         <Route exact path="/" component={ViewEvent} />
@@ -30,7 +36,7 @@ const Home = () => {
           <Route path="/facility" component={Facility} />
         </Switch>
       </div>
-      <Notification />
+      {notify}
     </Router>
   )
 }

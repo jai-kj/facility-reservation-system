@@ -4,7 +4,7 @@ const Facility = () => {
   
   return (
     <div>
-      <h1 className="p-3">Facility Page</h1>
+      <h1>Facility Page</h1>
     </div>
   )
 }

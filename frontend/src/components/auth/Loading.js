@@ -21,8 +21,13 @@ const Loading = (props) => {
   }, [loginFromToken, isAuthenticated, props.history ])
 
   return (    
-    <div className="d-flex justify-content-center align-content-center">
-      <img src={loadingLogo} alt="Loading..." />
+    <div style={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%', 
+      transform: 'translate(-50%, -50%)'
+    }}>
+      <img src={loadingLogo} alt="Loading..." width="180px"/>
     </div>
   )
 }

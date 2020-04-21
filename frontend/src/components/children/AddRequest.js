@@ -85,7 +85,7 @@ const AddRequest = () => {
       }
         return
     }
-  }, [ getRooms, onChange, responseSlotDate, facilityID, getEmptyTimeSlots ])
+  }, [ getRooms, onChange, responseSlotDate, facilityID, getEmptyTimeSlots, emptyTimeSlotsSelected ])
 
   const onSubmit = (e) => {
     if(eventSelectedID === ''){

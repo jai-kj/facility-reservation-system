@@ -34,7 +34,7 @@ const Read = () => {
                   requestID={request.requestID}
                   requestStatus={request.requestStatus}
                   requestDate={request.requestSlotDate}
-                  requestTiming={`${request.requestSlotFrom} - ${request.requestSlotTill}`}
+                  requestTiming={`${request.requestSlotFrom.replace(':00', '')} - ${request.requestSlotTill.replace(':00', '')}`}
                   facilityName={`${req.facilityType} ${req.facilityName}`}
                   eventName={request.event.eventName}
                   eventUnder={request.event.eventUnder}

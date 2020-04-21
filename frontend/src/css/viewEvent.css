@@ -33,3 +33,23 @@
   font-size: 1.1em;
   font-weight: 600;
 }
+
+.add-transition{
+  transition: all 10s ease-in-out;
+  -webkit-transition: all 10s ease-in-out;
+}
+
+.filter-labels {
+  border-radius: 3px;
+  background-color: #fff3f6;
+  color: #ff346a;
+  padding: 4px 8px;
+  margin-right: 1rem;
+}
+
+.clear{
+  font-size: 14px;
+  position: absolute;
+  right: 1.5rem;
+  width: 5rem;
+}

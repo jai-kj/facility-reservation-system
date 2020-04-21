@@ -1,6 +1,8 @@
 import React, { useState, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import RequestContext from '../../context/requests/requestContext'
+
 const MessageCard = (props) => {
 
   const { value, svvID, facilityID, requestID, requestStatus, requestDate, requestTiming, facilityName, eventName, eventUnder, eventIncharge, eventDescription } = props
@@ -51,7 +53,9 @@ const MessageCard = (props) => {
         (<ul className="list-group mt-2" style={{fontSize: '16px'}}>
           <li className="list-group-item">Event Name: <b>{eventName}</b></li>
           <li className="list-group-item">Description: <b>{eventDescription}</b></li>
-          <li className="list-group-item">Event Date and Time: On <b>{requestDate}</b> From <b>{requestTiming}</b></li>
+          <li className="list-group-item">
+            Event Date and Time: On <b>{moment(requestDate, 'YYYY-MM-DD').format('D')+" "+moment(requestDate, 'YYYY-MM-DD').format('MMM')+" "+ moment(requestDate, 'YYYY-MM-DD').format('YYYY')}</b> From <b>{requestTiming}</b>
+          </li>
           <li className="list-group-item">Event Under: <b>{eventUnder}</b></li>
           <li className="list-group-item">Event Incharge: <b>{name[0].charAt(0).toUpperCase()+name[0].slice(1)} {name[1].charAt(0).toUpperCase()+name[1].slice(1)}</b></li>
           <div className="d-flex justify-content-center mt-3">

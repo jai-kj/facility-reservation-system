@@ -34,10 +34,8 @@ const AddEvent = () => {
   }, [clearEventAdded])
   
   const onSubmit = (e) => {
-    // if(e.eventName){
-    //   return
-    // }
     if(e.eventName === '' || e.eventUnder === '' || e.eventDescription === ''){
+      setAlert('All Fields Required', 'danger')
       return
     }
     addEvent(e)

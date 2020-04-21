@@ -12,60 +12,57 @@ const Sidebar = () => {
     user.name.toUpperCase().match(/\b(\w)/g).join('')
   ), [user.name])
   
+  const student = (<Fragment key='student'>
+                      <div>
+                        <NavLink exact to="/"
+                        className="sidebar-tiles"
+                        activeClassName="sidebar-tiles--active">
+                          <div>
+                            <i className="far fa-calendar-alt"></i>
+                            <h6 className="sidebar-links">Event</h6>
+                          </div>
+                        </NavLink>
+                      </div>
+                    </Fragment>
+                  )
+  const staff= (<Fragment key='staff'>
+                  <div>
+                    <NavLink to="/addNew"
+                    className="sidebar-tiles"
+                    activeClassName="sidebar-tiles--active">
+                      <div>
+                        <i className="far fa-calendar-plus"></i>
+                        <h6 className="sidebar-links">Manage</h6>
+                      </div>
+                    </NavLink>
+                  </div>
+                </Fragment> 
+              )
+  
+  const admin = (<Fragment key='admin'>
+                  <div>
+                    <NavLink to="/facility"
+                    className="sidebar-tiles"
+                    activeClassName="sidebar-tiles--active">
+                      <div>
+                        <i className="fas fa-user-cog"></i>
+                        <h6 className="sidebar-links">Facilties</h6>
+                      </div>
+                    </NavLink>
+                  </div>
+                </Fragment>
+              )
+
   const designation = useMemo(() => {
     switch(user.designation) {
       case 'Student':
-        return (
-        <Fragment>
-          <div>
-            <NavLink exact to="/"
-            className="sidebar-tiles"
-            activeClassName="sidebar-tiles--active">
-              <div>
-                <i className="far fa-calendar-alt"></i>
-                <h6 className="sidebar-links">Event</h6>
-              </div>
-            </NavLink>
-          </div>
-        </Fragment>
-        )
+        return [ student ]
+      case 'Staff':
+        return [ student, staff ]
       default:
-        return (
-        <Fragment>
-          <div>
-            <NavLink exact to="/"
-            className="sidebar-tiles"
-            activeClassName="sidebar-tiles--active">
-              <div>
-                <i className="far fa-calendar-alt"></i>
-                <h6 className="sidebar-links">Event</h6>
-              </div>
-            </NavLink>
-          </div>
-          <div>
-            <NavLink to="/addNew"
-            className="sidebar-tiles"
-            activeClassName="sidebar-tiles--active">
-              <div>
-                <i className="far fa-calendar-plus"></i>
-                <h6 className="sidebar-links">New</h6>
-              </div>
-            </NavLink>
-          </div>
-          <div>
-            <NavLink to="/facility"
-            className="sidebar-tiles"
-            activeClassName="sidebar-tiles--active">
-              <div>
-                <i className="fas fa-user-cog"></i>
-                <h6 className="sidebar-links">Facilties</h6>
-              </div>
-            </NavLink>
-          </div>
-        </Fragment>
-      )
+        return [ student, staff, admin ]
     }
-  }, [user.designation])
+  }, [user.designation, student, staff, admin])
 
   const onLogout = useCallback(() => {
     logout()

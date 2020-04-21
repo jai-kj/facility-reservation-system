@@ -8,21 +8,24 @@ import Home from './components/pages/Home'
 
 import AuthState from './context/auth/AuthState'
 import AlertState from './context/alert/AlertState'
+import RequestState from './context/requests/RequestState'
 
-import './App.css';
+import './css/App.css';
 
 const App = () => {
   return (
     <AuthState>
-      <AlertState>
+      <RequestState>
+        <AlertState>
           <Router>
             <Switch>
-              <Route exact path="/loading" component={Loading} />
               <Route path="/login" component={Login} />
+              <Route exact path="/loading" component={Loading} />
               <PrivateRoute path="/" component={Home} />
             </Switch>
           </Router>
-      </AlertState>
+        </AlertState>
+      </RequestState>
     </AuthState>
   );
 }

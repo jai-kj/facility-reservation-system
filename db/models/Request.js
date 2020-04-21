@@ -40,7 +40,7 @@ Request.init(
 			allowNull: false,
 			defaultValue: "Waiting",
 			validate: {
-				isIn: [["Waiting", "Alloted", "Canceled"]],
+				isIn: [["Waiting", "Alloted", "Cancelled"]],
 			},
 		},
 		requestSlotDate: {

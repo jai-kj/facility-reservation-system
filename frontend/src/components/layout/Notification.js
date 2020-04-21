@@ -1,37 +1,93 @@
-import React from 'react'
-import { Card, Row, Col } from 'react-bootstrap'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import { Card, Row, Col, Modal, Button } from 'react-bootstrap'
 
-const Notification = () => {
-  const right = {
-      top: '0',
-      right: '0',
-      position: 'absolute',
-      width: '20rem',
-      height: '6rem',
-      borderRadius: '10px 0 0 10px',
-      backgroundColor: '#ffffff',
-      textAlign: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: '22px',
-      padding: '15px 0px',
-      border: '1px solid #f7f7f7',
-      boxShadow: '0 4px 8px 0 rgba(172, 172, 172, 0.2)'
-    }
+import Unread from '../children/Unread'
+import Read from '../children/Read'
+
+import '../../css/notification.css'
+  
+  const Notification = ({count}) => {
+  
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [visibility, setVisible] = useState({
+    isVisibleOne: true,
+    isVisibleTwo: false
+  })
+
+  const {isVisibleOne, isVisibleTwo} = visibility
+
+  const ShowComponent = () => {
+    if(isVisibleOne)
+      return <Unread />   
+    if(isVisibleTwo)
+      return <Read />
+  }
+
   return (
-    <Card className="d-flex flex-row" style={right}>
+    <Card className="right">
       <Row>
         <Col sm={2}>
           <i className="far fa-bell notify"></i>
         </Col>
         <Col sm={10}>
-          <span><strong>2 unread messages</strong></span>
-          <h6><a data-toggle="modal" href="#myModal" className="notify-link">Read now ></a></h6>
+          <span><strong>{(count !== 0) ? count: 'No'} unread messages</strong></span>
+          <h6>
+            <a 
+              href="#!" 
+              style={{cursor: 'pointer', color: '#428bca'}}
+              onClick={handleShow}
+            >
+              Read now >
+            </a>
+
+            <Modal size="lg" show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title><h2>Notifications</h2></Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{height: '70vh'}}>
+                <nav>
+                  <div className="nav nav-tabs nav-justified nav-pills">
+                    <a 
+                      className={`nav-item nav-link ${isVisibleOne}`}
+                      href="#!" 
+                      onClick={() => setVisible({isVisibleOne: true, isVisibleTwo: false})}
+                    >Unread</a>
+                    <a 
+                      className={`nav-item nav-link ${isVisibleTwo}`}
+                      id="nav-read-tab" 
+                      href="#!"
+                      onClick={() => setVisible({isVisibleTwo: true, isVisibleOne: false})}
+                    >Read</a>
+                  </div>
+
+                  <div>
+                    {ShowComponent()}
+                  </div>
+
+                </nav>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={handleClose}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+          </h6>
         </Col> 
       </Row>
     </Card>
   )
+}
+
+Notification.protoTypes = {
+  count: PropTypes.number.isRequired
 }
 
 export default Notification

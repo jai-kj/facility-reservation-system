@@ -1,0 +1,35 @@
+.filters {
+  height: 2.5rem;
+  background-color: #ffffff;
+  border-radius: 1px;
+  color: #494949;
+  cursor: pointer;
+}
+
+/* label{
+  padding: 0 .5em;
+} */
+
+.filters[type='date']::-webkit-inner-spin-button{
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.filters[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.filters:not(.btn) {
+  padding: 0 .5em;
+  border: 1px solid #e0dfdf;
+}
+
+.filters::placeholder {
+  color: #f7f7f7;
+}
+
+.font-awesome[type="submit"] {
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.1em;
+  font-weight: 600;
+}

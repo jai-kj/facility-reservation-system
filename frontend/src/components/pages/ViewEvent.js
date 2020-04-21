@@ -1,70 +1,149 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext, useEffect, useCallback, useState } from 'react'
+import moment from 'moment'
+
+import ConditionLoading from '../layout/ConditionalLoading'
+import Alerts from '../layout/Alerts'
+
+import AlertContext from '../../context/alert/alertContext'
+import FilterContext from '../../context/filters/filterContext'
 
 import { Row, Col } from 'react-bootstrap'
-import '../../css/addEvent.css'
+import '../../css/viewEvent.css'
 
 const ViewEvent = () => {
+
+  const alertContext = useContext(AlertContext)
+  const filterContext = useContext(FilterContext)
+
+  const { setAlert } = alertContext
+  const { facilityData, types, getRooms, roomInfo, error, getTimetable } = filterContext
+
+  useEffect(() => {
+    facilityData() 
+  }
+  //eslint-disable-next-line
+  , [facilityData])
+
+  const [filters, setFilters] = useState({
+    'facility': '',
+    'roomNo': '',
+    'currentDate': '',
+  })
+  
+  const onChange = useCallback(e => setFilters({ 
+    ...filters,
+      [e.target.name]: e.target.value,
+    
+    
+  }), [filters, setFilters])
+
+  const facilitySelect = useCallback(async(event) => {
+      onChange(event)
+      var optionSelected = event.target.value
+      getRooms(optionSelected)
+    }, [getRooms, onChange])
+
+
+  const { facility, roomNo, currentDate } = filters
+
+  const onSubmit = e => {
+    e.preventDefault()
+    if(facility === '' || roomNo === '' || currentDate === ''){
+      setAlert('All Fields Required', 'danger')
+      return
+    }
+    else if(error !== null) {
+      setAlert(error, 'danger')
+      return
+    }
+    else{
+      //Calculating next 7 days
+      var someDate = moment(currentDate);
+      var nextDate = someDate.clone().add(1, 'week').format().split('T')[0]
+      getTimetable({roomNo, currentDate, nextDate})
+      // getTimetable({, nextDate})
+    }
+  }
 
   return (
     <Fragment>
       <h1>Ongoing Events</h1>
-      <div>
-        <Row className="no-gutters mt-5">
-          <Col lg={3} className="d-flex flex-column">
-            <label>Facility</label>
-            <select className="filters facility">
-              <option defaultValue>Choose a Facility</option>
-              <option value="1">Labs</option>
-              <option value="2">Auditorium</option>
-              <option value="3">Seminar Hall</option>
-              <option value="4">E D Hall</option>
-            </select>
-          </Col>
-          <Col lg={2} className="d-flex flex-column">
-            <label>Room No</label>
-            <select className="filters labs">
-              <option defaultValue value="">Choose a Facility First</option>
-              <option value="301">301</option>
-              <option value="303">303</option>
-              <option value="305">305</option>
-              <option value="501">501</option>
-              <option value="502">502</option>
-              <option value="503">503</option>
-              <option value="505">505</option>
-            </select>
-          </Col>
-          <Col lg={3} className="d-flex flex-column">
-            <label>Committee</label>
-            <select className="filters committee">
-              <option defaultValue>Choose a Committee</option>
-              <option value="">None</option>
-              <option value="1">Student Council</option>
-              <option value="2">IEEE</option>
-              <option value="3">CSI</option>
-              <option value="4">IEI</option>
-              <option value="5">IETE</option>
-              <option value="6">ACM</option>
-            </select>
-          </Col>
-          <Col lg={2} className="d-flex flex-column">
-            <label>Date</label>
-            <select className="filters date">
-              <option defaultValue>Choose a Date Range</option>
-              <option value="1">April 1 - April 7</option>
-              <option value="2">April 8 - April 14</option>
-              <option value="3">April 15 - April 21</option>
-              <option value="4">April 22 - April 28</option>
-              <option value="5">April 29 - May 5</option>
-            </select>
-          </Col>
-          <Col lg={2} className="d-flex flex-column">
-            <label>Filter</label>
-            <div className="btn btn-expand-lg filters" style={{ backgroundColor: '#ff82a3', color: '#ffffff', type: "submit"}}>
-              <span style={{paddingRight: '10px'}}>Search</span><i className="fas fa-search"></i>
-            </div>
-          </Col>
-        </Row>  
-      </div>
+      <Alerts />
+      <ConditionLoading isLoading={!types}>
+        <form onSubmit={onSubmit}>
+          <Row className="no-gutters mt-5">
+
+            <Col lg={3} className="d-flex flex-column">
+              <label>Facility</label>
+              <select 
+                className="filters" 
+                name="facility"
+                onChange={facilitySelect}
+                required
+                >
+                <option value="" defaultValue >Choose a Facility</option>
+                {types && types.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </Col>
+
+            <Col lg={3} className="d-flex flex-column">
+              <label>Room No</label>
+              <select 
+                className="filters"
+                name="roomNo"
+                onChange={onChange}
+                required
+                >
+                <option value="" defaultValue>Choose a Room</option>
+                {roomInfo && roomInfo.map(rooms => (
+                  <option key={rooms.facilityID} value={rooms.facilityID}>{rooms.facilityName}</option>
+                ))}
+              </select>
+            </Col>
+
+            {/* <Col lg={3} className="d-flex flex-column">
+              <label>Committee</label>
+              <select 
+                className="filters"
+                name="committee"
+                onChange={onChange}
+                required
+                >
+              <option defaultValue value="">Choose a Committee</option>
+              <option value='0'>No Committee</option>
+                {committees && committees.map(committee => (
+                  <option key={committee} value={committee}>{committee}</option>
+                ))}
+              </select>
+            </Col> */}
+
+            <Col lg={3} className="d-flex flex-column">
+              <label>Date</label>
+              <input 
+                type="date" 
+                className="filters"
+                name="currentDate"
+                onChange={onChange}
+                required
+              />
+            </Col>
+
+            <Col lg={3} className="d-flex flex-column">
+              <label>Filter</label>
+              <input 
+                className="btn btn-expand-lg filters font-awesome" 
+                style={{ backgroundColor: '#ff82a3', color: '#ffffff'}} 
+                value="Search  &#xf002;"
+                type="submit" 
+              />
+            </Col>
+
+          </Row>  
+        </form>
+      </ConditionLoading>
+      <hr className="mt-4"/>
     </Fragment>
   )
 }

@@ -6,6 +6,7 @@ const Time = require("../db/models/Time");
 
 exports.getAll = async (svvID, designation, params, advQuery) => {
 	let result = {};
+	let flag = false;
 	if (params.facilityID) {
 		const facility = await Facility.findByPk(params.facilityID);
 		if (!facility) {
@@ -23,6 +24,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 			advQuery.where = {};
 		}
 		advQuery.where["facilityID"] = params.facilityID;
+		flag = true;
 	} else if (params.eventID) {
 		const event = await Event.findByPk(params.eventID);
 		if (!event) {
@@ -40,6 +42,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 			advQuery.where = {};
 		}
 		advQuery.where["eventID"] = params.eventID;
+		flag = true;
 	}
 
 	advQuery.include = [];
@@ -64,7 +67,6 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 	//* This segment is added to provide a single user with all the requests for all the facilities under him/her. (Only support for Admin users)
 	if (params.svvID && designation === "Admin") {
 		advQuery["model"] = Request;
-
 		const facilities = await Facility.findAll({
 			where: {
 				facilityIncharge: params.svvID,
@@ -75,6 +77,10 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 		});
 		if (result.err) return result;
 		result = facilities;
+		return result;
+	}
+	if(!flag) {
+		result = [];
 		return result;
 	}
 

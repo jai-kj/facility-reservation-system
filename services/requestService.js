@@ -1,3 +1,5 @@
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 const Event = require("../db/models/Event");
 const Request = require("../db/models/Request");
 const Facility = require("../db/models/Facility");
@@ -6,6 +8,7 @@ const Time = require("../db/models/Time");
 
 exports.getAll = async (svvID, designation, params, advQuery) => {
 	let result = {};
+	let flag = false;
 	if (params.facilityID) {
 		const facility = await Facility.findByPk(params.facilityID);
 		if (!facility) {
@@ -23,6 +26,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 			advQuery.where = {};
 		}
 		advQuery.where["facilityID"] = params.facilityID;
+		flag = true;
 	} else if (params.eventID) {
 		const event = await Event.findByPk(params.eventID);
 		if (!event) {
@@ -40,6 +44,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 			advQuery.where = {};
 		}
 		advQuery.where["eventID"] = params.eventID;
+		flag = true;
 	}
 
 	advQuery.include = [];
@@ -75,6 +80,10 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 		});
 		if (result.err) return result;
 		result = facilities;
+		return result;
+	}
+	if (!flag) {
+		result = [];
 		return result;
 	}
 

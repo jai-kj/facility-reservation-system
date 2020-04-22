@@ -75,6 +75,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 				facilityIncharge: params.svvID,
 			},
 			include: advQuery,
+			order: [[{ model: Request }, "requestTime", "DESC"]],
 		}).catch((err) => {
 			result.err = err;
 		});

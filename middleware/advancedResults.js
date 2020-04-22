@@ -23,6 +23,8 @@ const advancedResults = () => async (req, res, next) => {
 	//* To sort result using col name
 	if (reqQuery.order) {
 		const orderObj = JSON.parse(reqQuery.order);
+		console.log("advancedResults -> orderObj", orderObj);
+
 		advQuery.order = orderObj;
 	}
 

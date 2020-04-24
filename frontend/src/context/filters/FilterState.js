@@ -14,17 +14,23 @@ import {
   TIME_SLOT_ERROR,
   REMOVE_TIME_SLOT,
   GET_TIMETABLE,
-  TIMETABLE_ERROR
+  TIMETABLE_ERROR,
+  STORE_FACILITY_ID,
+  CLEAR_TIMETABLE,
+  GET_SINGLE_FACILITY
 } from '../types'
 
 const initialState = {
   types: null,
   committees: null,
-  // filterLoading: true,
   roomInfo: null,
   timeSlots: null,
   error: null,
+  facilityID: null,
+  facilityName: null,
+  facilityIncharge: null,
   timetable: []
+  // filterLoading: true,
 }
 
 const FilterState = props => {
@@ -55,6 +61,24 @@ const FilterState = props => {
     }
   }, [])
 
+  const getSingleFacility = useCallback(async(facilityID) => {
+    try {
+      const res = await axios.get(`/facilities/${facilityID}`)
+      // console.log("getSingleFacility -> res.data.facilityName", res.data.data)
+      dispatch({
+        type: GET_SINGLE_FACILITY,
+        payload: {
+          facilityName: res.data.data.facilityName,
+          facilityIncharge: res.data.data.facilityIncharge
+        } 
+      })
+    } catch (err) {
+      dispatch({
+        type: FILTER_ERROR,
+        payload: err.response.error
+      })
+    }
+  }, [])
   const getCommittees = useCallback(async() => {
     try {
       const {data:{data:{committees}}} = await axios.get("/events/committees")
@@ -114,11 +138,11 @@ const FilterState = props => {
   const clearTimeSlots = useCallback(() => dispatch({ type: REMOVE_TIME_SLOT }), [])
 
   const getTimetable = useCallback (async ({roomNo, currentDate, nextDate}) => {
+    dispatch({ type: STORE_FACILITY_ID, payload: roomNo })
     // console.log("getTimetable -> {roomNo, currentDate, nextDate}", {roomNo, currentDate, nextDate})
-    // console.log("getTimetable -> {facilityID, initialDate, nextDate}", {facilityID, initialDate, nextDate})
     try {
       const res = await axios.get(`/facilities/${roomNo}/timetables/weekly/${currentDate}_${nextDate}`)
-      console.log("getTimetable -> res", res)
+      // console.log("getTimetable -> res", res.data.data)
       dispatch({
         type: GET_TIMETABLE,
         payload: res.data.data
@@ -132,6 +156,8 @@ const FilterState = props => {
     }
   }, [])
 
+  const clearTimeTableData = useCallback(() => dispatch({type: CLEAR_TIMETABLE}), [])
+
   return (
     <FilterContext.Provider
       value={{
@@ -141,14 +167,21 @@ const FilterState = props => {
         roomInfo: state.roomInfo,
         timeSlots: state.timeSlots,
         error: state.error,
+        facilityID: state.facilityID,
+        facilityName: state.facilityName,
+        facilityIncharge: state.facilityIncharge,
+        operationTimeSlot: state.operationTimeSlot,
         facilityData,
+        getSingleFacility,
         getCommittees,
         getRooms,
         getEmptyTimeSlots,
         clearTimeSlots,
-        getTimetable
+        getTimetable,
+        clearTimeTableData
       }}
-    > {props.children}
+    > 
+      {props.children}
     </FilterContext.Provider>
   )
 }

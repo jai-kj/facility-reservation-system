@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { Row, Col } from 'react-bootstrap'
+import { useForm } from 'react-hook-form'
+import '../../css/viewEvent.css'
 
 import ConditionLoading from '../layout/ConditionalLoading'
 import EventRegistered from '../childcomponents/EventRegistered'
 import EmptyTimeSlot from '../childcomponents/EmptyTimeSlot'
+import FilterEvent from '../searchFilters/FilterEvent'
 
 import AuthContext from '../../context/auth/authContext'
 import AlertContext from '../../context/alert/alertContext'
@@ -11,17 +16,13 @@ import EventContext from '../../context/events/eventContext'
 import SelectContext from '../../context/select/selectContext'
 import RequestContext from '../../context/requests/requestContext'
 
-import { Row, Col } from 'react-bootstrap'
-import { useForm } from 'react-hook-form'
-import '../../css/viewEvent.css'
-
 const AddRequest = () => {
 
   const filterContext = useContext(FilterContext)
-  const { facilityData, types, getRooms, roomInfo, getEmptyTimeSlots, timeSlots, clearTimeSlots } = filterContext
+  const { facilityData, types, getRooms, roomInfo, getEmptyTimeSlots, timeSlots, clearTimeSlots, getSingleFacility, facilityIncharge } = filterContext
 
   const eventContext = useContext(EventContext)
-  const { getUserEvents, userEvents }  = eventContext
+  const { getUserEvents, userEvents, filteredEvents, clearFilteredEvents }  = eventContext
 
   const authContext = useContext(AuthContext)
   const { user } = authContext
@@ -33,7 +34,7 @@ const AddRequest = () => {
   const { setAlert } = alertContext
 
   const requestContext = useContext(RequestContext)
-  const { addNewRequest } = requestContext
+  const { addNewRequest, error } = requestContext
 
   const { register, handleSubmit, reset } = useForm()
 
@@ -42,7 +43,7 @@ const AddRequest = () => {
     getUserEvents(user.svvID)
     facilityData() 
     //eslint-disable-next-line
-  }, [ clearTimeSlots, getUserEvents, facilityData ])
+  }, [ clearTimeSlots, getUserEvents, facilityData])
 
   const [ timeFilter, setTimeFilter ] = useState({
     facility: '',
@@ -59,33 +60,41 @@ const AddRequest = () => {
   const facilitySelect = useCallback(async(event) => {
     onChange(event)
     var optionSelected = event.target.value
+    
     if( event.target.name === 'facility' ){
+      clearTimeSlots()
       getRooms(optionSelected)
       return
     }
+
     else if( event.target.name === 'facilityID' ){
-      onChange(event)
-      if(facilityID !== '' || responseSlotDate !== ''){
+      if( optionSelected !== '' && responseSlotDate !== ''){
         emptyTimeSlotsSelected()
         getEmptyTimeSlots({
           facilityID: optionSelected,
           responseSlotDate: responseSlotDate
-        })  
+        })
+        getSingleFacility(optionSelected)  
       }
+      else
+        clearTimeSlots()
       return
     }
+
     else if( event.target.name === 'responseSlotDate' ){
-      onChange(event)
-      if(facilityID !== '' || responseSlotDate !== ''){
+      if(facilityID !== '' && optionSelected !== ''){
         emptyTimeSlotsSelected()
         getEmptyTimeSlots({
           facilityID: facilityID,
           responseSlotDate: optionSelected
         })  
+        getSingleFacility(facilityID)
       }
-        return
+      else
+        clearTimeSlots()
+      return
     }
-  }, [ getRooms, onChange, responseSlotDate, facilityID, getEmptyTimeSlots, emptyTimeSlotsSelected ])
+  }, [ getRooms, onChange, responseSlotDate, facilityID, getEmptyTimeSlots, emptyTimeSlotsSelected, getSingleFacility, clearTimeSlots ])
 
   const onSubmit = (e) => {
     if(eventSelectedID === ''){
@@ -107,19 +116,25 @@ const AddRequest = () => {
         return
       }
 
-      addNewRequest(eventSelectedID, {
+      if(!addNewRequest(eventSelectedID, {
         facilityID: e.facilityID,
         requestSlotDate: e.responseSlotDate,
         requestSlotFrom: requestSlotFrom, 
         requestSlotTill: requestSlotTill,
         timeSchedule: timeSchedule
-      })
-
-      setAlert('New Request made to Facility Incharge Successfully', 'primary', 5000)
-      reset()
-      removeSelectedEvent()
-      emptyTimeSlotsSelected()
-      // }
+      })){
+        if(error !== null)
+          setAlert(error, 'danger')
+        return
+      }
+      else{
+        setAlert(`New Request made to Facility Incharge ${facilityIncharge !== null && facilityIncharge} Successfully`, 'primary', 5000)
+        reset()
+        removeSelectedEvent()
+        emptyTimeSlotsSelected()
+        clearTimeSlots()
+        clearFilteredEvents()
+      }
     }
   }
 
@@ -129,22 +144,50 @@ const AddRequest = () => {
         <Col md={12} className="d-flex justify-content-center mb-3">
           <h3>Add New Request</h3>
         </Col>
-        <Col md={7} style={{backgroundColor: '#ffffff', margin: '0', padding: '8px', height: '63vh'}}>
+        <Col md={7} style={{backgroundColor: '#ffffff', margin: '0', padding: '10px', height: '70vh'}}>
           <h4 className="mt-2 mb-3">Select an Event</h4>
-          <div style={{position: 'relative', overflowY: 'scroll', height: '85%'}}>
+          <FilterEvent />
+          <div style={{position: 'relative', overflowY: 'scroll', height: '75%'}}>
             <ConditionLoading isLoading={!userEvents} >
               {( userEvents === null || userEvents.length === 0) ? 
                 (<p className="empty text-secondary">You have no Events created.<br />Please create an Event to make a request</p>)
               : 
-                userEvents && userEvents.map( event => 
-                  (<EventRegistered
-                    key={event.eventID}
-                    eventID={event.eventID} 
-                    eventName={event.eventName} 
-                    eventUnder={event.eventUnder} 
-                    eventDescription={event.eventDescription}
-                  />)
-                )
+                filteredEvents !== null ? filteredEvents.length === 0 ? 
+                  (<p className="empty text-secondary">No Events Found</p>)
+                :(<TransitionGroup>
+                    { filteredEvents.map(event =>(
+                        <CSSTransition
+                          key={event.eventID}
+                          timeout={500}
+                          classNames="item"
+                          >
+                          <EventRegistered
+                            eventID={event.eventID} 
+                            eventName={event.eventName} 
+                            eventUnder={event && event.eventUnder} 
+                            eventDescription={event.eventDescription}
+                          />
+                        </CSSTransition>
+                      ))
+                    }
+                  </TransitionGroup>)
+                  : (<TransitionGroup>
+                    { userEvents && userEvents.map( event => (
+                        <CSSTransition
+                          key={event.eventID}
+                          timeout={500}
+                          classNames="item"
+                          >
+                          <EventRegistered
+                            eventID={event.eventID} 
+                            eventName={event.eventName} 
+                            eventUnder={event && event.eventUnder} 
+                            eventDescription={event.eventDescription}
+                          />
+                        </CSSTransition>
+                      ))
+                    }
+                  </TransitionGroup>)
               }
             </ConditionLoading>
           </div>
@@ -201,23 +244,27 @@ const AddRequest = () => {
               <Col md={12} className="mb-4">
                 <label>Select Time</label>
                 {
-                  (timeSlots === null || timeSlots.length === 0) 
-                  ? (<label className="h-100 ml-3 text-danger">Choose a Room and Date first</label>) 
-                  : (<ConditionLoading isLoading={!timeSlots}>
-                      <Row style={{fontSize: '15px'}}>
-                      {
-                        timeSlots && timeSlots.map(slots => (
-                            <Col md={4} key={slots.timeID} className="mb-2">
-                              <EmptyTimeSlot  
-                                timeID={slots.timeID}
-                                startTime={slots.startTime}
-                                endTime={slots.endTime}
-                              />
-                            </Col>
-                        ))
-                      }
-                      </Row>
-                    </ConditionLoading>)
+                  (timeSlots === null) 
+                  ? (<label className="h-100 ml-3 text-danger">Choose a Room and Date first</label>)
+                  : ((timeSlots.length === 0) 
+                    ? (<label className="h-100 ml-3 text-danger">No Slots Vacant! Choose another Facility or Date</label>)
+                    : (<ConditionLoading isLoading={!timeSlots}>
+                        <Row style={{fontSize: '15px'}}>
+                        {
+                          timeSlots && timeSlots.map(slots => (
+                              <Col md={4} key={slots.timeID} className="mb-2">
+                                <EmptyTimeSlot  
+                                  timeID={slots.timeID}
+                                  startTime={slots.startTime}
+                                  endTime={slots.endTime}
+                                />
+                              </Col>
+                          ))
+                        }
+                        </Row>
+                      </ConditionLoading>
+                    )
+                  )
                 }
                 
               </Col>

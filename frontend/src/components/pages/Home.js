@@ -10,6 +10,7 @@ import AuthContext from '../../context/auth/authContext'
 import FilterState from'../../context/filters/FilterState'
 import EventState from'../../context/events/EventState'
 import SelectState from'../../context/select/SelectState'
+import FacilityState from'../../context/facility/FacilityState'
 
 // import Profile from './Profile'
 import ViewEvent from './ViewEvent'
@@ -38,8 +39,8 @@ const Home = () => {
       return
     else  
       getAllUnreadReq(user.svvID)
+      //eslint-disable-next-line
     }, [getAllUnreadReq, user])
-  // console.log("Home -> prevState", prevState)
 
 
   const notify = useMemo(() => {
@@ -51,23 +52,25 @@ const Home = () => {
     <FilterState>
       <EventState>
         <SelectState>
-          <Router>
-            <Sidebar />
-            <div style=
-              {{
-                marginLeft: '200px',
-                backgroundColor: '#ffffff',
-                padding: '1.5rem'
-              }}>
-              {/* <Route exact path="/" component={Profile} user={user}/> */}
-              <Route exact path="/" component={ViewEvent} />
-              <Switch>
-                <Route path="/addNew" component={AddNew} />
-                <Route path="/facility" component={Facility} />
-              </Switch>
-            </div>
-            {notify}
-          </Router>
+          <FacilityState>
+            <Router>
+              <Sidebar />
+              <div style=
+                {{
+                  marginLeft: '200px',
+                  backgroundColor: '#ffffff',
+                  padding: '1.5rem'
+                }}>
+                {/* <Route exact path="/Profile" component={Profile} user={user}/> */}
+                <Route exact path="/" component={ViewEvent} />
+                <Switch>
+                  <Route path="/addNew" component={AddNew} />
+                  <Route path="/facility" component={Facility} />
+                </Switch>
+              </div>
+              {notify}
+            </Router>
+          </FacilityState>
         </SelectState>
       </EventState>
     </FilterState>

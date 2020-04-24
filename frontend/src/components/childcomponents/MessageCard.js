@@ -35,7 +35,7 @@ const MessageCard = (props) => {
           onClick={() => setVisible(!visible)}
           style={{ cursor: 'pointer'}}
         >
-          Request for allotment of {facilityName}
+          {facilityName} Request for {eventName} Event
           <i className="fas fa-caret-down" style={{padding: '2px 5px'}}/>
         </h5>
         <label
@@ -51,7 +51,7 @@ const MessageCard = (props) => {
       </div>
       {visible ? 
         (<ul className="list-group mt-2" style={{fontSize: '16px'}}>
-          <li className="list-group-item">Event Name: <b>{eventName}</b></li>
+          {/* <li className="list-group-item">Event Name: <b>{eventName}</b></li> */}
           <li className="list-group-item">Description: <b>{eventDescription}</b></li>
           <li className="list-group-item">
             Event Date and Time: On <b>{moment(requestDate, 'YYYY-MM-DD').format('D')+" "+moment(requestDate, 'YYYY-MM-DD').format('MMM')+" "+ moment(requestDate, 'YYYY-MM-DD').format('YYYY')}</b> From <b>{requestTiming}</b>

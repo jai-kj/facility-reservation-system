@@ -6,11 +6,14 @@
   cursor: pointer;
 }
 
+.filters[type='text'] {
+  cursor: text;
+}
 /* label{
   padding: 0 .5em;
 } */
 
-.filters[type='date']::-webkit-inner-spin-button{
+.filters[type='date']::-webkit-inner-spin-button {
   margin-top: 5px;
   cursor: pointer;
 }
@@ -25,18 +28,21 @@
 }
 
 .filters::placeholder {
-  color: #f7f7f7;
+  color: #808080;
+}
+
+.filters:focus {
+  width: 100%;
+}
+
+select.filters option {
+  font-size: 18px
 }
 
 .font-awesome[type="submit"] {
   font-family: "Font Awesome 5 Free";
   font-size: 1.1em;
   font-weight: 600;
-}
-
-.add-transition{
-  transition: all 10s ease-in-out;
-  -webkit-transition: all 10s ease-in-out;
 }
 
 .filter-labels {
@@ -47,9 +53,94 @@
   margin-right: 1rem;
 }
 
-.clear{
+.clear {
   font-size: 14px;
   position: absolute;
   right: 1.5rem;
   width: 5rem;
+}
+
+.tt {
+  height: auto;
+  max-height: 73vh;
+  overflow: auto;
+}
+
+.event-table {
+  /* margin: 1.5rem 0; */
+  width: 100%;
+  color: #494949;
+}
+
+.event-table .table-rows {
+  height: 6rem;
+}
+
+.event-table .table-rows td {
+  padding: 0;
+  margin: 0;
+}
+
+.event-table .table-rows:not(:last-child) {
+  border-bottom: 2px solid #f3f3f3;
+  z-index: 9;
+}
+
+.event-table .table-header th:not(.first-cell) {
+  background-color: #f3f3f3;
+  top: 0;
+  position: sticky;
+  z-index: 9;
+  padding: 10px;
+}
+
+.first-cell {
+  top: 0;
+  left: 0;
+  position: sticky;
+  padding: 0 20px;
+  z-index: 999;
+  background-color: #f3f3f3;
+}
+
+.event-table .table-header th:not(.days) {
+  text-align: center;
+  font-size: 15px;
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+.event-table tr .days:first-child:not(.first-cell) {
+  padding: 0 20px;
+  z-index: 99;
+  background-color: #ffffff;
+  position: sticky;
+  left: 0;
+}
+
+/* .event-table .table-header th:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.event-table .table-header th:last-child {
+  border-radius: 0px 10px 10px 0px;
+} */
+
+.Reserved {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+  background-color: #f7f7f7;
+  color: #494949;
+}
+
+.Event {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+  cursor: pointer;
 }

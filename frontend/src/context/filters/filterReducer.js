@@ -7,7 +7,10 @@ import {
   TIME_SLOT_ERROR,
   REMOVE_TIME_SLOT,
   GET_TIMETABLE,
-  TIMETABLE_ERROR
+  TIMETABLE_ERROR,
+  STORE_FACILITY_ID,
+  CLEAR_TIMETABLE,
+  GET_SINGLE_FACILITY
 } from '../types'
 
 export default (state, action) => {
@@ -23,6 +26,12 @@ export default (state, action) => {
       return {
         ...state,
         roomInfo: action.payload
+      }
+      
+    case GET_SINGLE_FACILITY:
+      return {
+        ...state,
+        ...action.payload
       }
 
     case GET_VACANT_SLOTS:
@@ -43,6 +52,20 @@ export default (state, action) => {
         timetable: action.payload
       }
     
+    case STORE_FACILITY_ID: 
+      return {
+        ...state,
+        facilityID: action.payload
+      }
+    
+    case CLEAR_TIMETABLE: 
+    return {
+      ...state,
+      timetable: [],
+      operationTimeSlot: null,
+      facilityID: null
+    }
+
     case FILTER_ERROR:
     case FETCH_ROOMS_ERROR:
     case TIME_SLOT_ERROR:

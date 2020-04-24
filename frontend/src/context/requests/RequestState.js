@@ -93,11 +93,13 @@ const RequestState = props => {
         type: ADD_NEW_REQUEST,
         payload: res.data
       })
+      return true
     } catch (err) {
       dispatch({
         type: REQUESTS_ERROR,
         payload: err.response.error
       })
+      return false
     }
   }, [])
 

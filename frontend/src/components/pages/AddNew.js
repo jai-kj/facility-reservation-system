@@ -18,13 +18,21 @@ const AddNew = () => {
   const ShowComponent = () => {
     if(isVisibleOne)
       return <AddEvent />   
-    if(isVisibleTwo)
+    else if(isVisibleTwo)
       return <AddRequest />
+    else
+      return (
+        <div className='emptyTable'>
+          <p className='text-secondary'>
+            Select above Buttons to manage your Events and Requests
+          </p>
+        </div>
+      )
   }
 
   return (
     <div>
-      <h1>Add New</h1>
+      <h1>Events and Requests</h1>
       <div className="d-flex justify-content-center mt-5">
         <div className={`card create-option ${isVisibleOne}`} onClick={() => setVisible({isVisibleOne: !isVisibleOne, isVisibleTwo: false})}>
           <h5 className="card-title">Create New Event</h5>

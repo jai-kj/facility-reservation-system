@@ -1,3 +1,5 @@
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 const Event = require("../db/models/Event");
 const Request = require("../db/models/Request");
 const Facility = require("../db/models/Facility");
@@ -67,11 +69,13 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 	//* This segment is added to provide a single user with all the requests for all the facilities under him/her. (Only support for Admin users)
 	if (params.svvID && designation === "Admin") {
 		advQuery["model"] = Request;
+		
 		const facilities = await Facility.findAll({
 			where: {
 				facilityIncharge: params.svvID,
 			},
 			include: advQuery,
+			order: [[{model: Request} ,"requestTime", "DESC"]],
 		}).catch((err) => {
 			result.err = err;
 		});
@@ -79,7 +83,7 @@ exports.getAll = async (svvID, designation, params, advQuery) => {
 		result = facilities;
 		return result;
 	}
-	if(!flag) {
+	if (!flag) {
 		result = [];
 		return result;
 	}

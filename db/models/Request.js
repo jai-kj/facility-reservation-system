@@ -72,6 +72,9 @@ Request.init(
 				});
 			},
 		},
+		defaultScope: {
+			order: [["requestTime", "DESC"]],
+		},
 	}
 );
 Request.belongsTo(Event, { foreignKey: "eventID" });

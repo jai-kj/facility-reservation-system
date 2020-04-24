@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react'
+import Tippy from '@tippyjs/react';
 import PropTypes from 'prop-types'
 
+import EventContext from '../../context/events/eventContext'
 import SelectContext from '../../context/select/selectContext'
 
 const EventRegistered = ({ eventID, eventName, eventUnder, eventDescription }) => {
@@ -10,6 +12,8 @@ const EventRegistered = ({ eventID, eventName, eventUnder, eventDescription }) =
   const selectContext = useContext(SelectContext)
   const { eventSelectedID, selectEvent, removeSelectedEvent }  = selectContext
 
+  const eventContext = useContext(EventContext)
+
   const eventStatus = () => {
     if(eventSelectedID !== eventID)
       selectEvent(eventID)
@@ -17,6 +21,13 @@ const EventRegistered = ({ eventID, eventName, eventUnder, eventDescription }) =
       removeSelectedEvent(eventID)
   }
 
+  const onDelete = () => {
+    if(!window.confirm("Are you sure to Delete this Event"))
+      return
+    // console.log('Button Pressed')
+    eventContext.deleteEvent(eventID)
+  }
+  
   var activeClass = {}
   if(eventID === eventSelectedID){
     activeClass = {
@@ -37,12 +48,28 @@ const EventRegistered = ({ eventID, eventName, eventUnder, eventDescription }) =
           {eventName}
         <i className="fas fa-caret-down" style={{padding: '2px 5px'}}/>
         </h6>
-        <i className={`far fa-check-circle checkbox`}
-        onClick={eventStatus} /> 
-        {
-          (eventID === eventSelectedID) 
-            ? (<i className={`far fa-check-circle checkbox true`} onClick={eventStatus} />) 
-            : (<i className={`far fa-check-circle checkbox`} onClick={eventStatus} />)}
+
+        {/* <Tippy
+          interactive={true}
+          content="Select Event"
+        > */}
+          <i className={`far fa-check-circle checkbox`}
+          onClick={eventStatus} /> 
+          {
+            (eventID === eventSelectedID) 
+            ? (<Tippy content='Event Selected'>
+                <i className={`far fa-check-circle checkbox true`} onClick={eventStatus} />
+              </Tippy>) 
+            : (<Tippy content='Select Event'>
+                <i className={`far fa-check-circle checkbox`} onClick={eventStatus} />
+              </Tippy>)
+          }
+        {/* </Tippy> */}
+
+        <Tippy content="Delete Event">
+          <i className="fas fa-trash delete-bin text-danger" onClick={onDelete}/>
+        </Tippy>
+
       </div>
       {visible ? 
         (<ul className="list-group" style={{fontSize: '14px'}}>

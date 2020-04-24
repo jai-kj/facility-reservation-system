@@ -18,7 +18,7 @@ const Sidebar = () => {
                         className="sidebar-tiles"
                         activeClassName="sidebar-tiles--active">
                           <div>
-                            <i className="far fa-calendar-alt"></i>
+                            <i className="far fa-calendar-alt" />
                             <h6 className="sidebar-links">Event</h6>
                           </div>
                         </NavLink>
@@ -31,7 +31,7 @@ const Sidebar = () => {
                     className="sidebar-tiles"
                     activeClassName="sidebar-tiles--active">
                       <div>
-                        <i className="far fa-calendar-plus"></i>
+                        <i className="far fa-calendar-plus" />
                         <h6 className="sidebar-links">Manage</h6>
                       </div>
                     </NavLink>
@@ -39,19 +39,19 @@ const Sidebar = () => {
                 </Fragment> 
               )
   
-  const admin = (<Fragment key='admin'>
-                  <div>
-                    <NavLink to="/facility"
-                    className="sidebar-tiles"
-                    activeClassName="sidebar-tiles--active">
-                      <div>
-                        <i className="fas fa-user-cog"></i>
-                        <h6 className="sidebar-links">Facilties</h6>
-                      </div>
-                    </NavLink>
-                  </div>
-                </Fragment>
-              )
+  // const admin = (<Fragment key='admin'>
+  //                 <div>
+  //                   <NavLink to="/facility"
+  //                   className="sidebar-tiles"
+  //                   activeClassName="sidebar-tiles--active">
+  //                     <div>
+  //                       <i className="far fa-calendar-check" />
+  //                       <h6 className="sidebar-links">Facilties</h6>
+  //                     </div>
+  //                   </NavLink>
+  //                 </div>
+  //               </Fragment>
+  //             )
 
   const designation = useMemo(() => {
     switch(user.designation) {
@@ -60,9 +60,10 @@ const Sidebar = () => {
       case 'Staff':
         return [ student, staff ]
       default:
-        return [ student, staff, admin ]
+        return [ student, staff ]
+          // , admin ]
     }
-  }, [user.designation, student, staff, admin])
+  }, [user.designation, student, staff])
 
   const onLogout = useCallback(() => {
     logout()
@@ -85,7 +86,7 @@ const Sidebar = () => {
         <a onClick={onLogout} href="#!"
         className="sidebar-tiles logout">
           <div>
-            <i className="fas fa-sign-out-alt"></i>
+            <i className="fas fa-sign-out-alt" />
             <h6 className="sidebar-links">Logout</h6>
           </div>
         </a>

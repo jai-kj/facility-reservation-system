@@ -1,4 +1,5 @@
 import React, { Fragment, useContext, useEffect, useCallback, useState } from 'react'
+import { CSSTransition } from 'react-transition-group';
 import moment from 'moment'
 
 import ConditionLoading from '../layout/ConditionalLoading'
@@ -18,12 +19,13 @@ const ViewEvent = () => {
   const filterContext = useContext(FilterContext)
 
   const { setAlert } = alertContext
-  const { facilityData, types, getRooms, roomInfo, error, getTimetable } = filterContext
+  const { facilityData, types, getRooms, roomInfo, error, getTimetable, clearTimeTableData, timetable, getSingleFacility, facilityName } = filterContext
 
   useEffect(() => {
     facilityData() 
+    clearTimeTableData()
     //eslint-disable-next-line
-  }, [facilityData])
+  }, [facilityData, clearTimeTableData])
   
   const [visibleFilter, setVisibleFilter] = useState({
     visibility: false,
@@ -34,26 +36,32 @@ const ViewEvent = () => {
   })
   const { register, handleSubmit, reset } = useForm()
 
-  const { visibility, facility, roomNo, currentDate, nextDate } = visibleFilter
+  const { visibility, facility, currentDate, nextDate } = visibleFilter
     
   const facilitySelect = useCallback(async(event) => {
-      // onChange(event)
       var optionSelected = event.target.value
       if( event.target.name === 'facility' ){
         getRooms(optionSelected)
+        setVisibleFilter({facility: optionSelected})
       }
+      
+      if( event.target.name === 'roomNo')
+        getSingleFacility(optionSelected)
+
+      clearTimeTableData()
       return
-    }, [getRooms])
+    }, [getRooms, getSingleFacility, setVisibleFilter, clearTimeTableData])
 
   const calcNextDateofWeek = (date) => {
     var someDate = moment(date)
-    return someDate.clone().add(1, 'week').format().split('T')[0]    
+    return someDate.clone().add(6, 'days').format().split('T')[0]    
   }
 
   const closeFilters = useCallback(() => {
     setVisibleFilter({visibility: false})
     reset()
-  }, [setVisibleFilter, reset])
+    clearTimeTableData()
+  }, [setVisibleFilter, reset, clearTimeTableData])
 
   const onSubmit = (e) => {
     if(e.facility === '' || e.roomNo === '' || e.currentDate === ''){
@@ -67,6 +75,7 @@ const ViewEvent = () => {
     else{
       //Calculating next 7 days
       var newDate = calcNextDateofWeek(e.currentDate)
+      
       setVisibleFilter({
         visibility: true,
         facility: e.facility, 
@@ -78,7 +87,7 @@ const ViewEvent = () => {
       getTimetable({
         roomNo: e.roomNo, 
         currentDate: e.currentDate, 
-        newDate 
+        nextDate: newDate 
       })
     }
   }
@@ -112,6 +121,7 @@ const ViewEvent = () => {
               <select 
                 className="filters"
                 name="roomNo"
+                onChange={facilitySelect}
                 ref={register}
                 required
                 >
@@ -147,20 +157,32 @@ const ViewEvent = () => {
         </form>
       </ConditionLoading>
       {
-        visibility ? 
-          (<Row className="my-3 add-transition">
-            <label className="filter-labels">
-              {facility} {roomInfo && roomInfo.filter(rooms => roomNo === rooms.facilityID)[0].facilityName}
-            </label>
-            <label className="filter-labels">
-              {moment(currentDate, 'YYYY-MM-DD').format('D')+" "+moment(currentDate, 'YYYY-MM-DD').format('MMM')} - {moment(nextDate, 'YYYY-MM-DD').format('D')+" "+moment(nextDate, 'YYYY-MM-DD').format('MMM')}
-            </label>
-            <button className="btn btn-dark clear" type="submit" onClick={closeFilters} >Clear All</button>
-          </Row>) 
-        : null
+        <CSSTransition
+          in={visibility}
+          timeout={300}
+          classNames="alert"
+          unmountOnExit  
+        >
+          <Row className="my-3 add-transition">
+          <label className="filter-labels">
+            {facility} {facilityName !== null ? facilityName : null}
+          </label>
+          <label className="filter-labels">
+            {moment(currentDate, 'YYYY-MM-DD').format('D')+" "+moment(currentDate, 'YYYY-MM-DD').format('MMM')} - {moment(nextDate, 'YYYY-MM-DD').format('D')+" "+moment(nextDate, 'YYYY-MM-DD').format('MMM')}
+          </label>
+          <button className="btn btn-dark clear" type="submit" onClick={closeFilters} >Clear All</button>
+          </Row>
+        </CSSTransition>
       }
       <hr />
-      <TimeTable />
+      {timetable === undefined || timetable.length === 0  ?
+        (<div className='emptyTable'>
+          <p className='text-secondary'>
+            Select above Filters to view Ongoing Events in the Desired Facility
+          </p>
+        </div>)
+        :(<TimeTable />)
+      }
     </Fragment>
   )
 }

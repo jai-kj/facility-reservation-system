@@ -2,6 +2,7 @@
   top: 0;
   right: 0;
   position: absolute;
+  /* position: fixed; */
   display: flex;
   flex-direction: row;
   width: 20rem;

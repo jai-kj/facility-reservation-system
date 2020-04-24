@@ -38,26 +38,38 @@
   border-radius: 15px;
 }
 
-.filters::placeholder{
-  color: #494949
-}
-
 .row{
   margin:0;
   padding: 0
 }
 
+.css-yk16xz-control {
+  height: 2.5rem;
+}
+
+.css-1wa3eu0-placeholder{
+  cursor: text;
+}
+
 .desc{
   height: 150px;
   resize: none;
+  cursor: text;
 }
 
 .checkbox{
   position: absolute;
   padding: 2px 5px;
-  right: 15px;
+  right: 3.5rem;
   cursor: pointer;
   color: rgb(173, 173, 173)
+}
+
+.delete-bin{
+  position: absolute;
+  padding: 2px 5px;
+  right: 1.5rem;
+  cursor: pointer;
 }
 
 .checkbox.true{

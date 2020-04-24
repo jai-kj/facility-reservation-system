@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Card, Row, Col, Modal, Button } from 'react-bootstrap'
+
+import FilterContext from '../../context/filters/filterContext'
 
 import Unread from '../children/Unread'
 import Read from '../children/Read'
 
 import '../../css/notification.css'
   
-  const Notification = ({count}) => {
+const Notification = ({count}) => {
   
+  const filterContext = useContext(FilterContext)
+  const { clearTimeTableData } = filterContext
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    clearTimeTableData()
+  };
   const handleShow = () => setShow(true);
 
   const [visibility, setVisible] = useState({
@@ -65,11 +72,11 @@ import '../../css/notification.css'
                     >Read</a>
                   </div>
 
-                  <div>
-                    {ShowComponent()}
-                  </div>
-
                 </nav>
+
+                <div>
+                  {ShowComponent()}
+                </div>
 
               </Modal.Body>
               <Modal.Footer>

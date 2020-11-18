@@ -147,7 +147,7 @@ const ViewEvent = () => {
               <label>Filter</label>
               <input 
                 className="btn btn-expand-lg filters font-awesome" 
-                style={{ backgroundColor: '#ff82a3', color: '#ffffff'}} 
+                style={{ backgroundColor: '#7377E8', color: '#ffffff'}} 
                 value="Search  &#xf002;"
                 type="submit" 
               />

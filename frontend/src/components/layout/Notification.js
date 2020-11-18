@@ -49,7 +49,7 @@ const Notification = ({count}) => {
               style={{cursor: 'pointer', color: '#428bca'}}
               onClick={handleShow}
             >
-              Read now >
+              {'Read now >'}
             </a>
 
             <Modal size="lg" show={show} onHide={handleClose}>

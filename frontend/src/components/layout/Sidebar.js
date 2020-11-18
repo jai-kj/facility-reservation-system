@@ -39,19 +39,19 @@ const Sidebar = () => {
                 </Fragment> 
               )
   
-  // const admin = (<Fragment key='admin'>
-  //                 <div>
-  //                   <NavLink to="/facility"
-  //                   className="sidebar-tiles"
-  //                   activeClassName="sidebar-tiles--active">
-  //                     <div>
-  //                       <i className="far fa-calendar-check" />
-  //                       <h6 className="sidebar-links">Facilties</h6>
-  //                     </div>
-  //                   </NavLink>
-  //                 </div>
-  //               </Fragment>
-  //             )
+  const admin = (<Fragment key='admin'>
+                  <div>
+                    <NavLink to="/facility"
+                    className="sidebar-tiles"
+                    activeClassName="sidebar-tiles--active">
+                      <div>
+                        <i className="far fa-calendar-check" />
+                        <h6 className="sidebar-links">Facilties</h6>
+                      </div>
+                    </NavLink>
+                  </div>
+                </Fragment>
+              )
 
   const designation = useMemo(() => {
     switch(user.designation) {
@@ -60,10 +60,9 @@ const Sidebar = () => {
       case 'Staff':
         return [ student, staff ]
       default:
-        return [ student, staff ]
-          // , admin ]
+        return [ student, staff, admin ]
     }
-  }, [user.designation, student, staff])
+  }, [ user.designation, student, staff, admin ])
 
   const onLogout = useCallback(() => {
     logout()

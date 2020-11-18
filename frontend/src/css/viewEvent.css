@@ -9,6 +9,7 @@
 .filters[type='text'] {
   cursor: text;
 }
+
 /* label{
   padding: 0 .5em;
 } */
@@ -47,8 +48,8 @@ select.filters option {
 
 .filter-labels {
   border-radius: 3px;
-  background-color: #fff3f6;
-  color: #ff346a;
+  background-color: #EEEEFC;
+  color: #7377E8;
   padding: 4px 8px;
   margin-right: 1rem;
 }

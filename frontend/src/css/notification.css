@@ -34,7 +34,7 @@ a.nav-link.true:hover {
 }
 
 .nav-link.true {
-  background-color: #ff82a3;
+  background-color: #7377E8;
   color: #ffffff;
   border: transparent;
 }
@@ -65,8 +65,8 @@ button {
   border-radius: 50%;
   font-size: 30px;
   padding: 12px 15px;
-  color: #ff82a3;
-  background-color: #f7f7f7;
+  color: #7377E8;
+  background-color: #f9f9fc;
 }
 
 a.notify-link {

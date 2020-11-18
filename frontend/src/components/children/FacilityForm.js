@@ -153,7 +153,7 @@ const FacilityForm = () => {
         </Row>
         <button 
           className="btn btn-block mt-4 mb-3" 
-          style={{backgroundColor: '#ff82a3', color: '#ffffff'}}>
+          style={{backgroundColor: '#7377E8', color: '#ffffff'}}>
           Add Facility
         </button>
         {/* On Edit Functionality */}

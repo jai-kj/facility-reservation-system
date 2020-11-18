@@ -18,7 +18,7 @@ const EmptyTimeSlot = ({timeID, startTime, endTime}) => {
   var activeSlot = {}
   if(timeSchedule.includes(timeID))
     activeSlot = {
-      backgroundColor: '#ff82a3',
+      backgroundColor: '#7377E8',
       color: '#ffffff'
     }
 

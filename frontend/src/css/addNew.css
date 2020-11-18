@@ -15,8 +15,8 @@
 .create-option.true {
   border: none;
   color: #ffffff;
-  background-color: #ff82a3;
-  box-shadow: 0 4px 10px 0px rgba(253, 89, 133, 0.3);
+  background-color: #7377E8;
+  box-shadow: 0 4px 10px 0px rgba(92, 89, 253, 0.3);
 }
 
 .create-option:hover {
@@ -24,7 +24,7 @@
 }
 
 .create-option.true:hover {
-  box-shadow: 0 5px 10px 1px rgba(253, 89, 133, 0.4);
+  box-shadow: 0 5px 10px 1px rgba(94, 118, 224, 0.4);
 }
 
 .add-container {
@@ -38,8 +38,8 @@
   border-radius: 15px;
 }
 
-.row{
-  margin:0;
+.row {
+  margin: 0;
   padding: 0
 }
 
@@ -47,17 +47,17 @@
   height: 2.5rem;
 }
 
-.css-1wa3eu0-placeholder{
+.css-1wa3eu0-placeholder {
   cursor: text;
 }
 
-.desc{
+.desc {
   height: 150px;
   resize: none;
   cursor: text;
 }
 
-.checkbox{
+.checkbox {
   position: absolute;
   padding: 2px 5px;
   right: 3.5rem;
@@ -65,14 +65,14 @@
   color: rgb(173, 173, 173)
 }
 
-.delete-bin{
+.delete-bin {
   position: absolute;
   padding: 2px 5px;
   right: 1.5rem;
   cursor: pointer;
 }
 
-.checkbox.true{
+.checkbox.true {
   color: blue;
 }
 
@@ -90,6 +90,6 @@
   position: relative;
   justify-content: center;
   /* left: 50%; */
-  /* transform: translate(-50%, 0%); */
-  /* margin-bottom: 1rem; */
-/* } */ 
+/* transform: translate(-50%, 0%); */
+/* margin-bottom: 1rem; */
+/* } */

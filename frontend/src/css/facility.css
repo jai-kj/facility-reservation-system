@@ -1,0 +1,13 @@
+.facilities-container{
+  background-color: #f7f7f7;
+  box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 1rem; 
+}
+
+.facilities-block {
+  background-color: #ffffff;
+  height: 400px;
+  position: relative;
+  overflow-y: scroll;
+}

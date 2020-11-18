@@ -1,1 +1,1 @@
-// To handle actual logic of the services provided by applicationCache.
+// To handle actual logic of the services provided by application.

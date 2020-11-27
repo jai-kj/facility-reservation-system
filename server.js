@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const path = require("path");
 const errorHandler = require("./middleware/errors");
 
 //* Configuring ENV
@@ -52,6 +53,14 @@ app.use("/fr/api/v1/auth", auth);
 app.use("/fr/api/v1/users", users);
 
 app.use(errorHandler);
+
+// Serve static assets in production
+if(process.env.NODE_ENV === 'production') {
+	// Set static folder
+	app.use(express.static('frontend/build'))
+
+	app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')))
+}
 
 //* Spinning up server
 const server = app.listen(PORT, () =>
